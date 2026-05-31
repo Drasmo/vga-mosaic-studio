@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>VGA Mozaïek Studio Pro</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121214; color: #e2e8f0; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        .tab-nav { display: flex; justify-content: center; align-items: center; background-color: #1a1a1e; border-bottom: 2px solid #2d2d34; position: sticky; top: 0; z-index: 1000; min-height: 60px; }
+        .lang-selector { position: absolute; left: 20px; }
+        .lang-selector select { padding: 8px 12px; background-color: #2d3748; color: white; border: 1px solid #4a5568; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .tab-btn { background: none; border: none; color: #94a3b8; padding: 16px 15px; cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.2s ease; border-bottom: 3px solid transparent; }
+        .tab-btn:hover { color: #fff; background-color: #24242b; }
+        .tab-btn.active { color: #f1c40f; border-bottom: 3px solid #f1c40f; background-color: #24242b; }
+        .chevron { color: #f1c40f; font-size: 14px; font-weight: 900; margin: 0 5px; user-select: none; opacity: 0.5; }
+        .tab-content { display: none; padding: 30px; box-sizing: border-box; }
+        .tab-content.active { display: block; }
+        .panel { background: #1e1e24; padding: 25px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); box-sizing: border-box; }
+        .studio-title { text-align: center; color: #f1c40f; margin-top: 0; margin-bottom: 10px; }
+        .uitleg { font-size: 14px; color: #94a3b8; background: #141419; padding: 15px; border-radius: 6px; margin-bottom: 25px; line-height: 1.6; border-left: 4px solid #3498db; }
+        
+        button, select, input[type="text"] { background-color: #3498db; color: white; border: none; padding: 12px 20px; margin: 8px 0; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.2s; width: 100%; box-sizing: border-box; font-weight: bold; }
+        input[type="text"] { background-color: #2d3748; border: 1px solid #4a5568; cursor: text; }
+        button:hover, select:hover { background-color: #2980b9; }
+        button:disabled { background-color: #4a4a5a; cursor: not-allowed; color: #71717a; }
+        select { background-color: #2d3748; border: 1px solid #4a5568; font-weight: normal; color: #fff; }
+        
+        .lbl-status-info { font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 15px; text-align: center; font-style: italic; }
+        .status-box { margin-top: 20px; padding: 15px; background: #14213d; border-left: 4px solid #f1c40f; border-radius: 4px; font-family: monospace; font-size: 13px; color: #e5e5e5; }
+
+        .app-layout { display: flex; justify-content: center; align-items: flex-start; gap: 30px; margin: 0 auto; width: 100%; max-width: 1800px; box-sizing: border-box; }
+        .side-panel { flex: 1; display: flex; flex-direction: column; align-items: center; background: #1a1a1f; padding: 15px; border-radius: 8px; border: 1px solid #2d2d34; }
+        .side-panel h3 { margin: 0 0 15px 0; color: #cbd5e1; font-size: 16px; font-weight: 500; }
+        .side-panel canvas { width: 100%; height: auto; border: 2px solid #3f3f46; border-radius: 6px; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        #canvasPreview { image-rendering: pixelated; image-rendering: crisp-edges; }
+        .controls { flex: 0 0 480px; }
+
+        .slider-groep { background: #141419; padding: 15px; border-radius: 5px; margin-top: 15px; border: 1px solid #2d2d34; }
+        .slider-groep label { display: flex; justify-content: space-between; font-size: 13px; color: #cbd5e1; margin-bottom: 8px; }
+        input[type=range] { width: 100%; cursor: pointer; margin-bottom: 10px; background: #4a5568; height: 6px; border-radius: 3px; appearance: none; }
+
+        .btn-start { background-color: #27ae60; font-size: 16px; margin-top: 20px; }
+        .btn-start:hover { background-color: #2ecc71; }
+        .btn-export { background-color: #e67e22; font-size: 14px; margin-top: 5px; }
+        .btn-export:hover { background-color: #d35400; }
+        .btn-export-jpg { background-color: #8e44ad; font-size: 14px; margin-top: 5px; }
+        .btn-export-jpg:hover { background-color: #732d91; }
+
+        .studio-view-container { background-color: #09090b; padding: 40px 20px; border-radius: 8px; border: 1px solid #27272a; min-height: 400px; }
+        #mosaicContainer { display: grid; gap: 0; justify-content: center; margin: 0 auto; box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
+        #mosaicContainer .tegel-wrapper { width: 100%; height: 100%; position: relative; cursor: pointer; transition: transform 0.1s ease; }
+        #mosaicContainer .tegel-wrapper:hover { transform: scale(3.5); z-index: 10; box-shadow: 0 0 15px rgba(255,255,255,0.9); outline: 1px solid #fff; }
+        #mosaicContainer img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .ontbrekend { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px black; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.2); overflow: hidden; }
+
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
+        #modal img { max-width: 512px; max-height: 512px; border: 3px solid #71717a; border-radius: 6px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        #modal-tekst { margin-top: 18px; color: #e4e4e7; font-family: monospace; font-size: 15px; background: #18181b; padding: 12px 24px; border-radius: 6px; border: 1px solid #27272a;}
+    </style>
+</head>
+<body>
+
+    <div class="tab-nav">
+        <div class="lang-selector">
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="nl">NL | Nederlands</option>
+                <option value="en">EN | English</option>
+                <option value="de">DE | Deutsch</option>
+                <option value="fr">FR | Français</option>
+            </select>
+        </div>
+
+        <button class="tab-btn active" id="btn-tab-start" onclick="switchTab('tab-start')" data-i18n="tab_start">🏠 Start</button>
+        <div class="chevron">&#10095;</div>
+        <button class="tab-btn" id="btn-tab-sorteerder" onclick="switchTab('tab-sorteerder')" data-i18n="tab_sorteerder">🎨 Verffabriek</button>
+        <div class="chevron">&#10095;</div>
+        <button class="tab-btn" id="btn-tab-schilder" onclick="switchTab('tab-schilder')" data-i18n="tab_schilder">🖼️ De Schilder Studio</button>
+        <div class="chevron">&#10095;</div>
+        <button class="tab-btn" id="btn-tab-resultaat" onclick="switchTab('tab-resultaat')" data-i18n="tab_resultaat">✨ Eindresultaat</button>
+    </div>
+
+    <div id="tab-start" class="tab-content active">
+        <div class="panel" style="max-width: 800px; margin: 0 auto; text-align: left;">
+            <h2 class="studio-title" data-i18n="start_titel">Welkom bij de VGA Mozaïek Studio</h2>
+            <p data-i18n="start_intro">Deze studio helpt je om elke foto om te toveren tot een prachtig interactief mozaïek, opgebouwd uit jouw eigen afbeeldingen in een 256-kleuren VGA palet. Het proces bestaat uit 3 simpele stappen:</p>
+            <h3 style="color: #3498db;" data-i18n="start_stap1_titel">Stap 1: De Verffabriek (Database Maken)</h3>
+            <p data-i18n="start_stap1_text">Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's (bijv. vakantiefoto's of screenshots) in. Het algoritme analyseert de menselijke 'Redmean' kleur van elke foto en verdeelt ze automatisch in maximaal 256 kleurmappen. <em>Tip: Gebruik gevarieerde foto's (licht, donker, kleurrijk) voor het beste resultaat.</em></p>
+            <h3 style="color: #27ae60;" data-i18n="start_stap2_titel">Stap 2: De Schilder Studio (Mozaïek Bouwen)</h3>
+            <p data-i18n="start_stap2_text">Kies je doelfoto (het kunstwerk dat je wilt namaken) en koppel de database die je in Stap 1 hebt gemaakt. Gebruik de live preview om de perfecte resolutie te bepalen. Klik op bouwen en de browser weeft jouw foto's aan elkaar tot één groot raster.</p>
+            <h3 style="color: #e67e22;" data-i18n="start_stap3_titel">Stap 3: Het Eindresultaat (Exporteren)</h3>
+            <p data-i18n="start_stap3_text">Bekijk het gegenereerde meesterwerk. Tevreden? Geef je project een naam en exporteer het. Je kunt het project opslaan als HTML of direct als een JPG afbeelding van hoge kwaliteit downloaden.</p>
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="switchTab('tab-sorteerder')" style="width: auto; padding: 15px 40px; font-size: 16px; background-color: #f1c40f; color: #111;" data-i18n="start_btn">Start met de Verffabriek</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-sorteerder" class="tab-content">
+        <div class="panel" style="max-width: 700px; margin: 0 auto;">
+            <h2 class="studio-title" data-i18n="sorteer_titel">🎨 VGA Verffabriek</h2>
+            <div class="uitleg" data-i18n="sorteer_uitleg"><strong>Dominante Kleuranalyse (Geoptimaliseerd 16x16 & Redmean):</strong><br>Selecteer hier je bronafbeeldingen. Dit script scant elke foto via een stemsysteem en plaatst ze in de exacte VGA-kleurmap.</div>
+            <button onclick="kiesSorteerInput()" data-i18n="sorteer_btn_input">1. Kies bronafbeeldingen (Meerdere selecteren)</button>
+            <div style="text-align: center; margin-bottom: 15px;"><span id="lblSorteerInput" class="lbl-status-info" data-i18n="lbl_geen_bestanden">Geen bestanden geselecteerd</span></div>
+            <button onclick="kiesSorteerOutput()" data-i18n="sorteer_btn_output">2. Kies of maak de 'VGA_Database' hoofdmap</button>
+            <div style="text-align: center; margin-bottom: 15px;"><span id="lblSorteerOutput" class="lbl-status-info" data-i18n="lbl_geen_doelmap">Nog geen doelmap gekoppeld</span></div>
+            <button id="btnStartSorteren" class="btn-start" onclick="startSorteerProces()" disabled data-i18n="sorteer_btn_start">3. Start Sorteren & Categoriseren</button>
+            <div id="sorteerStatusBox" class="status-box" style="display: none;"><strong data-i18n="status_titel">Status:</strong><br><span id="sorteerStatusTekst">Klaar om te starten...</span></div>
+        </div>
+        <canvas id="sorteerWerkCanvas" width="512" height="512" style="display:none;"></canvas>
+        <canvas id="sorteerScanCanvas" width="16" height="16" style="display:none;"></canvas>
+    </div>
+
+    <div id="tab-schilder" class="tab-content">
+        <div class="app-layout">
+            <div class="side-panel" id="panelLeft" style="visibility: hidden;">
+                <h3 data-i18n="schilder_paneel_links">Originele Foto</h3>
+                <canvas id="canvasOrigineel"></canvas>
+            </div>
+
+            <div class="controls panel">
+                <h2 class="studio-title" data-i18n="schilder_titel">🖼️ Mozaïek Configurator</h2>
+                <button onclick="kiesSchilderDoel()" data-i18n="schilder_btn_doel">1. Kies Doelfoto</button>
+                <div style="text-align: center; margin-bottom: 10px;"><span id="lblSchilderDoel" class="lbl-status-info" data-i18n="lbl_geen_foto">Geen foto gekozen</span></div>
+                <button onclick="kiesSchilderDatabase()" data-i18n="schilder_btn_db">2. Koppel VGA Database Map</button>
+                <div style="text-align: center; margin-bottom: 10px;"><span id="lblSchilderDB" class="lbl-status-info" data-i18n="lbl_geen_db">Geen database gekoppeld</span></div>
+
+                <label style="font-size: 13px; margin-top: 10px; display: block; color: #cbd5e1;" data-i18n="schilder_lbl_missend">3. Wat te doen bij ontbrekende kleuren?</label>
+                <select id="optieOntbrekend">
+                    <option value="kies_dichtstbijzijnde" data-i18n="schilder_opt1">Optie 2: Dichtstbijzijnde beschikbare kleur (Aanbevolen)</option>
+                    <option value="toon_vakje" data-i18n="schilder_opt2">Optie 1: Toon diagnose-vakjes met vraagteken</option>
+                </select>
+
+                <div class="slider-groep">
+                    <label><span data-i18n="schilder_lbl_kolommen">Raster (Aantal Kolommen)</span> <span id="valResTekst" style="color:#f1c40f; font-weight:bold;">80</span></label>
+                    <input type="range" id="sliderRes" min="30" max="150" value="80" oninput="updateLivePreviewStudio()">
+                    <label><span data-i18n="schilder_lbl_grootte">Tegelgrootte op Scherm (Pixels)</span></label>
+                    <select id="optieGrootte" onchange="updateLivePreviewStudio()">
+                        <option value="8">8x8</option>
+                        <option value="16" selected>16x16</option>
+                        <option value="32">32x32</option>
+                        <option value="64">64x64</option>
+                    </select>
+                    <div id="valSchermformaat" style="text-align: center; margin-top: 15px; padding-top: 12px; border-top: 1px solid #2d2d34; color: #2ecc71; font-size: 14px; font-weight: bold;">
+                        <span data-i18n="schilder_formaat">Uiteindelijk Formaat:</span> <span id="formaatWaarde">-- x -- px</span>
+                    </div>
+                </div>
+
+                <button id="btnStartSchilderen" class="btn-start" onclick="voerSchilderWerkUit()" disabled data-i18n="schilder_btn_start">4. Bouw Interactief Mozaïek</button>
+                
+                <div id="exportSectie" style="display: none; background: #2d2d34; padding: 15px; border-radius: 6px; margin-top: 15px; border: 1px solid #f1c40f;">
+                    <label style="font-size: 12px; color: #cbd5e1; margin-bottom: 5px; display:block;" data-i18n="export_naam_lbl">Project Naam:</label>
+                    <input type="text" id="projectNaamInput" value="Mijn Draagbare VGA Mozaïek">
+                    <button id="btnExportStudio" class="btn-export" onclick="voerStudioExportUit()" data-i18n="schilder_btn_export">5a. Exporteer interactief HTML Project</button>
+                    <!-- NIEUW: JPG EXPORT KNOP -->
+                    <button id="btnExportJPG" class="btn-export btn-export-jpg" onclick="exporteerAlsJPG()" data-i18n="export_jpg_btn">5b. Download als enkele JPG (Print-kwaliteit)</button>
+                </div>
+                <div id="schilderStatus" style="color: #f1c40f; margin-top: 15px; font-style: italic; text-align: center; font-weight: bold;" data-i18n="status_klaar">Klaar voor invoer.</div>
+            </div>
+
+            <div class="side-panel" id="panelRight" style="visibility: hidden;">
+                <h3><span data-i18n="schilder_paneel_rechts">VGA Voorvertoning</span> (<span id="previewRes">80</span>x)</h3>
+                <canvas id="canvasPreview"></canvas>
+            </div>
+        </div>
+        <canvas id="analyseCanvas" style="display:none;"></canvas>
+    </div>
+
+    <div id="tab-resultaat" class="tab-content">
+        <div class="uitleg" style="max-width: 1200px; margin: 0 auto 20px auto; text-align: center; border-left: none; border-top: 4px solid #27ae60;">
+            <strong data-i18n="resultaat_titel">✨ Interactieve Expositie Ruimte</strong><br>
+            <span data-i18n="resultaat_uitleg">Beweeg je muis over het mozaïek om in te zoomen op de afzonderlijke tegels. Klik op een cel om de originele 512x512 afbeelding te bekijken.</span>
+        </div>
+        <div class="studio-view-container">
+            <div id="mosaicContainer">
+                <div style="text-align: center; color: #71717a; padding-top: 150px; font-size: 16px; font-style: italic;" data-i18n="resultaat_leeg">
+                    Nog geen kunstwerk gegenereerd. Ga naar tab '2. De Schilder Studio' om een mozaïek op te bouwen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" onclick="sluitStudioModal(event)">
+        <img id="groteFoto" src="" alt="Laden...">
+        <div id="modal-tekst">Bestandsnaam</div>
+    </div>
+
+    <script>
+        const vertalingen = {
+            nl: {
+                tab_start: "🏠 Start", tab_sorteerder: "🎨 Verffabriek", tab_schilder: "🖼️ De Schilder Studio", tab_resultaat: "✨ Eindresultaat",
+                start_titel: "Welkom bij de VGA Mozaïek Studio",
+                start_intro: "Deze studio helpt je om elke foto om te toveren tot een prachtig interactief mozaïek, opgebouwd uit jouw eigen afbeeldingen in een 256-kleuren VGA palet. Het proces bestaat uit 3 simpele stappen:",
+                start_stap1_titel: "Stap 1: De Verffabriek (Database Maken)",
+                start_stap1_text: "Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's in. Het algoritme analyseert de menselijke 'Redmean' kleur van elke foto en verdeelt ze automatisch in maximaal 256 kleurmappen. <em>Tip: Gebruik gevarieerde foto's voor het beste resultaat.</em>",
+                start_stap2_titel: "Stap 2: De Schilder Studio (Mozaïek Bouwen)",
+                start_stap2_text: "Kies je doelfoto en koppel de database die je in Stap 1 hebt gemaakt. Gebruik de live preview om de perfecte resolutie te bepalen. Klik op bouwen en de browser weeft jouw foto's aan elkaar.",
+                start_stap3_titel: "Stap 3: Het Eindresultaat (Exporteren)",
+                start_stap3_text: "Bekijk het gegenereerde meesterwerk. Tevreden? Geef je project een naam en exporteer het. Je kunt het project opslaan als interactief HTML pakket of direct als een hoge resolutie JPG downloaden voor print.",
+                start_btn: "Start met de Verffabriek",
+                sorteer_titel: "🎨 VGA Verffabriek",
+                sorteer_uitleg: "<strong>Dominante Kleuranalyse (Geoptimaliseerd 16x16 & Redmean):</strong><br>Selecteer hier je bronafbeeldingen. Dit script scant elke foto via een stemsysteem en plaatst ze in de exacte VGA-kleurmap.",
+                sorteer_btn_input: "1. Kies bronafbeeldingen (Meerdere selecteren)",
+                lbl_geen_bestanden: "Geen bestanden geselecteerd",
+                sorteer_btn_output: "2. Kies of maak de 'VGA_Database' hoofdmap",
+                lbl_geen_doelmap: "Nog geen doelmap gekoppeld",
+                sorteer_btn_start: "3. Start Sorteren & Categoriseren",
+                status_titel: "Status:",
+                schilder_titel: "🖼️ Mozaïek Configurator",
+                schilder_btn_doel: "1. Kies Doelfoto",
+                lbl_geen_foto: "Geen foto gekozen",
+                schilder_btn_db: "2. Koppel VGA Database Map",
+                lbl_geen_db: "Geen database gekoppeld",
+                schilder_lbl_missend: "3. Wat te doen bij ontbrekende kleuren?",
+                schilder_opt1: "Optie 2: Dichtstbijzijnde beschikbare kleur (Aanbevolen)",
+                schilder_opt2: "Optie 1: Toon diagnose-vakjes met vraagteken",
+                schilder_lbl_kolommen: "Raster (Aantal Kolommen)",
+                schilder_lbl_grootte: "Tegelgrootte op Scherm (Pixels)",
+                schilder_formaat: "Uiteindelijk Formaat:",
+                schilder_btn_start: "4. Bouw Interactief Mozaïek",
+                export_naam_lbl: "Project Naam:",
+                schilder_btn_export: "5a. Exporteer interactief HTML Project",
+                export_jpg_btn: "5b. Download als enkele JPG (Print-kwaliteit)",
+                status_klaar: "Klaar voor invoer.",
+                schilder_paneel_links: "Originele Foto",
+                schilder_paneel_rechts: "VGA Voorvertoning",
+                resultaat_titel: "✨ Interactieve Expositie Ruimte",
+                resultaat_uitleg: "Beweeg je muis over het mozaïek om in te zoomen op de afzonderlijke tegels. Klik op een cel om de originele 512x512 afbeelding te bekijken.",
+                resultaat_leeg: "Nog geen kunstwerk gegenereerd. Ga naar tab '2. De Schilder Studio' om een mozaïek op te bouwen.",
+                dyn_bezig: "Zware berekening bezig...",
+                dyn_export_bezig: "Projectbestanden kopiëren en 64x64 thumbnails genereren...",
+                def_project_naam: "Mijn Draagbare VGA Mozaïek",
+                dyn_jpg_bezig: "JPG genereren op hoge resolutie... (Dit kan even duren)"
+            },
+            en: {
+                tab_start: "🏠 Home", tab_sorteerder: "🎨 Paint Factory", tab_schilder: "🖼️ Painter Studio", tab_resultaat: "✨ Result Studio",
+                start_titel: "Welcome to the VGA Mosaic Studio",
+                start_intro: "This studio helps you transform any photo into a beautiful interactive mosaic, built from your own images in a 256-color VGA palette. The process consists of 3 simple steps:",
+                start_stap1_titel: "Step 1: The Paint Factory (Build Database)",
+                start_stap1_text: "Before painting, you need paint. In the <strong>Paint Factory</strong>, you input your own photos. The algorithm analyzes the perceptual 'Redmean' color and distributes them into up to 256 color folders. <em>Tip: Use varied photos for the best result.</em>",
+                start_stap2_titel: "Step 2: Painter Studio (Build Mosaic)",
+                start_stap2_text: "Choose your target photo and link the database you created in Step 1. Use the live preview to determine the perfect resolution. Click build and let the browser weave your photos together.",
+                start_stap3_titel: "Step 3: The Final Result (Export)",
+                start_stap3_text: "View the generated masterpiece. Satisfied? Give your project a name and export it. You can save the project as an interactive HTML package or download a high-res JPG directly for printing.",
+                start_btn: "Start with the Paint Factory",
+                sorteer_titel: "🎨 VGA Paint Factory",
+                sorteer_uitleg: "<strong>Dominant Color Analysis (Optimized 16x16 & Redmean):</strong><br>Select your source images here. This script scans each photo and places it in the exact VGA color folder.",
+                sorteer_btn_input: "1. Choose source images (Multiple selection)",
+                lbl_geen_bestanden: "No files selected",
+                sorteer_btn_output: "2. Choose or create the 'VGA_Database' root folder",
+                lbl_geen_doelmap: "No target folder linked",
+                sorteer_btn_start: "3. Start Sorting & Categorizing",
+                status_titel: "Status:",
+                schilder_titel: "🖼️ Mosaic Configurator",
+                schilder_btn_doel: "1. Choose Target Photo",
+                lbl_geen_foto: "No photo chosen",
+                schilder_btn_db: "2. Link VGA Database Folder",
+                lbl_geen_db: "No database linked",
+                schilder_lbl_missend: "3. What to do with missing colors?",
+                schilder_opt1: "Option 2: Use nearest available color (Recommended)",
+                schilder_opt2: "Option 1: Show diagnostic blocks with question marks",
+                schilder_lbl_kolommen: "Grid (Number of Columns)",
+                schilder_lbl_grootte: "Tile size on screen (Pixels)",
+                schilder_formaat: "Final Size:",
+                schilder_btn_start: "4. Build Interactive Mosaic",
+                export_naam_lbl: "Project Name:",
+                schilder_btn_export: "5a. Export interactive HTML Project",
+                export_jpg_btn: "5b. Download as single JPG (Print quality)",
+                status_klaar: "Ready for input.",
+                schilder_paneel_links: "Original Photo",
+                schilder_paneel_rechts: "VGA Preview",
+                resultaat_titel: "✨ Interactive Exhibition Space",
+                resultaat_uitleg: "Hover over the mosaic to zoom in on individual tiles. Click a cell to view the original 512x512 image.",
+                resultaat_leeg: "No artwork generated yet. Go to tab '2. Painter Studio' to build a mosaic.",
+                dyn_bezig: "Heavy calculation in progress...",
+                dyn_export_bezig: "Copying project files and generating 64x64 thumbnails...",
+                def_project_naam: "My Portable VGA Mosaic",
+                dyn_jpg_bezig: "Generating high-res JPG... (This may take a moment)"
+            },
+            de: {
+                tab_start: "🏠 Start", tab_sorteerder: "🎨 Farbfabrik", tab_schilder: "🖼️ Maler-Studio", tab_resultaat: "✨ Ergebnis-Studio",
+                start_titel: "Willkommen im VGA Mosaik Studio",
+                start_intro: "Dieses Studio hilft Ihnen, jedes Foto in ein wunderschönes interaktives Mosaik zu verwandeln, das aus Ihren eigenen Bildern in einer 256-Farben-VGA-Palette besteht. 3 einfache Schritte:",
+                start_stap1_titel: "Schritt 1: Die Farbfabrik (Datenbank erstellen)",
+                start_stap1_text: "In der <strong>Farbfabrik</strong> geben Sie Ihre eigenen Fotos ein. Der Algorithmus analysiert die 'Redmean'-Farbe und verteilt sie auf bis zu 256 Farbordner.",
+                start_stap2_titel: "Schritt 2: Maler-Studio (Mosaik bauen)",
+                start_stap2_text: "Wählen Sie Ihr Zielfoto und verknüpfen Sie die Datenbank aus Schritt 1. Nutzen Sie die Live-Vorschau. Klicken Sie auf Bauen.",
+                start_stap3_titel: "Schritt 3: Das Endergebnis (Exportieren)",
+                start_stap3_text: "Zufrieden? Geben Sie dem Projekt einen Namen und exportieren Sie es als interaktives HTML-Paket oder als hochauflösendes JPG für den Druck.",
+                start_btn: "Starten mit der Farbfabrik",
+                sorteer_titel: "🎨 VGA Farbfabrik",
+                sorteer_uitleg: "Wählen Sie Ihre Quellbilder aus. Das Skript platziert sie in den genauen VGA-Farbordner.",
+                sorteer_btn_input: "1. Quellbilder wählen (Mehrere möglich)",
+                lbl_geen_bestanden: "Keine Dateien ausgewählt",
+                sorteer_btn_output: "2. 'VGA_Database' Ordner wählen/erstellen",
+                lbl_geen_doelmap: "Kein Zielordner verknüpft",
+                sorteer_btn_start: "3. Sortierung starten",
+                status_titel: "Status:",
+                schilder_titel: "🖼️ Mosaik-Konfigurator",
+                schilder_btn_doel: "1. Zielfoto wählen",
+                lbl_geen_foto: "Kein Foto ausgewählt",
+                schilder_btn_db: "2. VGA-Datenbank verknüpfen",
+                lbl_geen_db: "Keine Datenbank verknüpft",
+                schilder_lbl_missend: "3. Was tun bei fehlenden Farben?",
+                schilder_opt1: "Option 2: Nächstgelegene Farbe verwenden (Empfohlen)",
+                schilder_opt2: "Option 1: Diagnoseblöcke anzeigen",
+                schilder_lbl_kolommen: "Raster (Anzahl Spalten)",
+                schilder_lbl_grootte: "Kachelgröße (Pixel)",
+                schilder_formaat: "Endformat:",
+                schilder_btn_start: "4. Interaktives Mosaik bauen",
+                export_naam_lbl: "Projektname:",
+                schilder_btn_export: "5a. Interaktives HTML-Projekt exportieren",
+                export_jpg_btn: "5b. Als einzelnes JPG herunterladen (Druckqualität)",
+                status_klaar: "Bereit für Eingabe.",
+                schilder_paneel_links: "Originalfoto",
+                schilder_paneel_rechts: "VGA-Vorschau",
+                resultaat_titel: "✨ Interaktiver Ausstellungsraum",
+                resultaat_uitleg: "Fahren Sie mit der Maus über das Mosaik, um zu zoomen. Klicken Sie, um das Originalbild zu sehen.",
+                resultaat_leeg: "Noch kein Kunstwerk generiert.",
+                dyn_bezig: "Schwere Berechnung läuft...",
+                dyn_export_bezig: "Kopiere Projektdateien und generiere 64x64 Thumbnails...",
+                def_project_naam: "Mein VGA Mosaik",
+                dyn_jpg_bezig: "Generiere hochauflösendes JPG... (Bitte warten)"
+            },
+            fr: {
+                tab_start: "🏠 Accueil", tab_sorteerder: "🎨 Fabrique", tab_schilder: "🖼️ Studio Peintre", tab_resultaat: "✨ Résultat",
+                start_titel: "Bienvenue dans le Studio Mosaïque VGA",
+                start_intro: "Ce studio vous aide à transformer n'importe quelle photo en une belle mosaïque interactive, à partir de vos propres images. 3 étapes simples:",
+                start_stap1_titel: "Étape 1: La Fabrique (Créer la base)",
+                start_stap1_text: "Dans la <strong>Fabrique</strong>, importez vos propres photos. L'algorithme analyse la couleur 'Redmean' et les répartit dans 256 dossiers de couleurs.",
+                start_stap2_titel: "Étape 2: Studio (Construire la Mosaïque)",
+                start_stap2_text: "Choisissez votre photo cible et liez la base de données. Utilisez l'aperçu en direct. Cliquez sur construire.",
+                start_stap3_titel: "Étape 3: Le Résultat (Exporter)",
+                start_stap3_text: "Satisfait ? Exportez-le en tant que package HTML interactif ou téléchargez un JPG haute résolution pour l'impression.",
+                start_btn: "Commencer avec la Fabrique",
+                sorteer_titel: "🎨 Fabrique VGA",
+                sorteer_uitleg: "Sélectionnez vos images sources. Ce script les place dans le dossier de couleur exact.",
+                sorteer_btn_input: "1. Choisir images (Sélection multiple)",
+                lbl_geen_bestanden: "Aucun fichier sélectionné",
+                sorteer_btn_output: "2. Choisir/Créer le dossier 'VGA_Database'",
+                lbl_geen_doelmap: "Aucun dossier lié",
+                sorteer_btn_start: "3. Démarrer le tri",
+                status_titel: "Statut:",
+                schilder_titel: "🖼️ Configurateur de Mosaïque",
+                schilder_btn_doel: "1. Choisir photo cible",
+                lbl_geen_foto: "Aucune photo",
+                schilder_btn_db: "2. Lier la base de données VGA",
+                lbl_geen_db: "Aucune base liée",
+                schilder_lbl_missend: "3. Que faire des couleurs manquantes?",
+                schilder_opt1: "Option 2: Utiliser la couleur dispo la plus proche (Recommandé)",
+                schilder_opt2: "Option 1: Afficher les blocs de diagnostic",
+                schilder_lbl_kolommen: "Grille (Colonnes)",
+                schilder_lbl_grootte: "Taille des tuiles (Pixels)",
+                schilder_formaat: "Taille finale:",
+                schilder_btn_start: "4. Construire la Mosaïque",
+                export_naam_lbl: "Nom du projet:",
+                schilder_btn_export: "5a. Exporter le projet HTML interactif",
+                export_jpg_btn: "5b. Télécharger en un seul JPG (Qualité d'impression)",
+                status_klaar: "Prêt.",
+                schilder_paneel_links: "Photo originale",
+                schilder_paneel_rechts: "Aperçu VGA",
+                resultaat_titel: "✨ Espace d'exposition interactif",
+                resultaat_uitleg: "Survolez la mosaïque pour zoomer. Cliquez pour voir l'image originale.",
+                resultaat_leeg: "Aucune œuvre générée.",
+                dyn_bezig: "Calcul lourd en cours...",
+                dyn_export_bezig: "Copie des fichiers et création des miniatures 64x64...",
+                def_project_naam: "Ma Mosaïque VGA",
+                dyn_jpg_bezig: "Génération du JPG haute résolution... (Veuillez patienter)"
+            }
+        };
+
+        let currentLang = 'nl';
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (vertalingen[lang] && vertalingen[lang][key]) {
+                    el.innerHTML = vertalingen[lang][key];
+                }
+            });
+            document.getElementById('projectNaamInput').value = getTxt('def_project_naam');
+        }
+
+        function getTxt(key) { return vertalingen[currentLang][key] || key; }
+
+        let sorteerFiles = []; let sorteerDirHandle = null;
+        let schilderDoelFile = null; let schilderImgObj = null; let schilderDirHandle = null;
+        let globaleGridState = []; let globaleKolommen = 80; let globaleGrootte = 16;
+        let globaleAantalRijen = 0;
+
+        const vgaPalet = [];
+        const basisKleuren = [[0,0,0], [128,0,0], [0,128,0], [128,128,0], [0,0,128], [128,0,128], [0,128,128], [192,192,192], [128,128,128], [255,0,0], [0,255,0], [255,255,0], [0,0,255], [255,0,255], [0,255,255], [255,255,255]];
+        basisKleuren.forEach((c, i) => vgaPalet.push({index: i, r: c[0], g: c[1], b: c[2]}));
+        const levels = [0, 95, 135, 175, 215, 255];
+        for (let r = 0; r < 6; r++) for (let g = 0; g < 6; g++) for (let b = 0; b < 6; b++) vgaPalet.push({index: vgaPalet.length, r: levels[r], g: levels[g], b: levels[b]});
+        for (let i = 0; i < 24; i++) { let gray = 8 + (i * 10); vgaPalet.push({index: vgaPalet.length, r: gray, g: gray, b: gray}); }
+
+        function rgbAfstandRedmean(r1, g1, b1, r2, g2, b2) {
+            let rmean = (r1 + r2) / 2; let r = r1 - r2; let g = g1 - g2; let b = b1 - b2;
+            return Math.sqrt( (2 + rmean/256) * Math.pow(r, 2) + 4 * Math.pow(g, 2) + (2 + (255 - rmean)/256) * Math.pow(b, 2) );
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+
+        async function kiesSorteerInput() {
+            try {
+                const bestanden = await window.showOpenFilePicker({ multiple: true, types: [{ accept: {'image/*': []} }] });
+                sorteerFiles = await Promise.all(bestanden.map(h => h.getFile()));
+                document.getElementById('lblSorteerInput').innerText = `${sorteerFiles.length} bestanden.`;
+                if (sorteerDirHandle) document.getElementById('btnStartSorteren').disabled = false;
+            } catch (e) {}
+        }
+
+        async function kiesSorteerOutput() {
+            try {
+                sorteerDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                document.getElementById('lblSorteerOutput').innerText = sorteerDirHandle.name;
+                if (sorteerFiles.length > 0) document.getElementById('btnStartSorteren').disabled = false;
+            } catch (e) {}
+        }
+
+        async function startSorteerProces() {
+            document.getElementById('btnStartSorteren').disabled = true;
+            document.getElementById('sorteerStatusBox').style.display = 'block';
+            const canvas = document.getElementById('sorteerWerkCanvas'); const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const scanCanvas = document.getElementById('sorteerScanCanvas'); const scanCtx = scanCanvas.getContext('2d', { willReadFrequently: true });
+            let succesTeller = 0;
+            for (let i = 0; i < sorteerFiles.length; i++) {
+                const file = sorteerFiles[i];
+                document.getElementById('sorteerStatusTekst').innerText = `${i + 1} / ${sorteerFiles.length} (${file.name})`;
+                try {
+                    const imgBitmap = await createImageBitmap(file);
+                    const size = Math.min(imgBitmap.width, imgBitmap.height);
+                    const startX = (imgBitmap.width - size) / 2; const startY = (imgBitmap.height - size) / 2;
+                    ctx.clearRect(0, 0, 512, 512); ctx.drawImage(imgBitmap, startX, startY, size, size, 0, 0, 512, 512);
+                    scanCtx.clearRect(0, 0, 16, 16); scanCtx.drawImage(canvas, 0, 0, 512, 512, 0, 0, 16, 16);
+                    const pixelData = scanCtx.getImageData(0, 0, 16, 16).data;
+                    const stemBus = new Array(256).fill(0);
+                    for (let p = 0; p < pixelData.length; p += 4) {
+                        let besteVgaIdx = 0, minAfstand = Infinity;
+                        for (let j = 0; j < vgaPalet.length; j++) {
+                            let dist = rgbAfstandRedmean(pixelData[p], pixelData[p+1], pixelData[p+2], vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
+                            if (dist < minAfstand) { minAfstand = dist; besteVgaIdx = j; }
+                        }
+                        stemBus[besteVgaIdx]++;
+                    }
+                    let winnendeIndex = 0, meesteStemmen = 0;
+                    for (let v = 0; v < stemBus.length; v++) {
+                        if (stemBus[v] > meesteStemmen) { meesteStemmen = stemBus[v]; winnendeIndex = v; }
+                    }
+                    const b = vgaPalet[winnendeIndex];
+                    const kleurMapHandle = await sorteerDirHandle.getDirectoryHandle(`Index_${b.index}_RGB_${b.r}_${b.g}_${b.b}`, { create: true });
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+                    const fileHandle = await kleurMapHandle.getFileHandle(`${file.name.split('.')[0]}_${Date.now()}.jpg`, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(blob); await writable.close();
+                    succesTeller++;
+                } catch (error) {}
+            }
+            document.getElementById('sorteerStatusTekst').innerText = `100% (${succesTeller})`;
+            document.getElementById('btnStartSorteren').disabled = false;
+        }
+
+        async function kiesSchilderDoel() {
+            try {
+                const bestanden = await window.showOpenFilePicker({ types: [{ accept: {'image/*': []} }] });
+                schilderDoelFile = await bestanden[0].getFile();
+                document.getElementById('lblSchilderDoel').innerText = schilderDoelFile.name;
+                schilderImgObj = await createImageBitmap(schilderDoelFile);
+                document.getElementById('panelLeft').style.visibility = 'visible';
+                document.getElementById('panelRight').style.visibility = 'visible';
+                const cOrig = document.getElementById('canvasOrigineel');
+                cOrig.width = schilderImgObj.width; cOrig.height = schilderImgObj.height;
+                cOrig.getContext('2d').drawImage(schilderImgObj, 0, 0);
+                updateLivePreviewStudio();
+                if (schilderDirHandle) { document.getElementById('btnStartSchilderen').disabled = false; document.getElementById('exportSectie').style.display = 'none'; }
+            } catch (e) {}
+        }
+
+        async function kiesSchilderDatabase() {
+            try {
+                schilderDirHandle = await window.showDirectoryPicker();
+                document.getElementById('lblSchilderDB').innerText = schilderDirHandle.name;
+                if (schilderDoelFile) { document.getElementById('btnStartSchilderen').disabled = false; document.getElementById('exportSectie').style.display = 'none'; }
+            } catch (e) {}
+        }
+
+        function updateLivePreviewStudio() {
+            if (!schilderImgObj) return;
+            const aantalKolommen = parseInt(document.getElementById('sliderRes').value);
+            const tegelGrootte = parseInt(document.getElementById('optieGrootte').value);
+            const aantalRijen = Math.floor(aantalKolommen * (schilderImgObj.height / schilderImgObj.width));
+
+            document.getElementById('valResTekst').innerText = `${aantalKolommen}`;
+            document.getElementById('previewRes').innerText = aantalKolommen;
+            const formatEl = document.getElementById('formaatWaarde');
+            if (formatEl) formatEl.innerText = `${aantalKolommen * tegelGrootte} x ${aantalRijen * tegelGrootte} px`;
+
+            const cPrev = document.getElementById('canvasPreview');
+            cPrev.width = aantalKolommen; cPrev.height = aantalRijen;
+            const ctxPrev = cPrev.getContext('2d', { willReadFrequently: true });
+            ctxPrev.drawImage(schilderImgObj, 0, 0, aantalKolommen, aantalRijen);
+            const imgData = ctxPrev.getImageData(0, 0, aantalKolommen, aantalRijen);
+            const data = imgData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                let bestVGA = vgaPalet[0], minAfstand = Infinity;
+                for (let j = 0; j < vgaPalet.length; j++) {
+                    let dist = rgbAfstandRedmean(data[i], data[i+1], data[i+2], vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
+                    if (dist < minAfstand) { minAfstand = dist; bestVGA = vgaPalet[j]; }
+                }
+                data[i] = bestVGA.r; data[i+1] = bestVGA.g; data[i+2] = bestVGA.b;
+            }
+            ctxPrev.putImageData(imgData, 0, 0);
+        }
+
+        async function voerSchilderWerkUit() {
+            const btnStart = document.getElementById('btnStartSchilderen');
+            const statusLabel = document.getElementById('schilderStatus');
+            globaleKolommen = parseInt(document.getElementById('sliderRes').value);
+            globaleGrootte = parseInt(document.getElementById('optieGrootte').value);
+            btnStart.disabled = true; document.getElementById('exportSectie').style.display = 'none';
+            statusLabel.innerText = getTxt('dyn_bezig');
+            globaleGridState = []; 
+
+            const alleBeschikbare = [];
+            for await (const [naam, handle] of schilderDirHandle.entries()) {
+                if (handle.kind === 'directory' && naam.startsWith('Index_')) {
+                    const delen = naam.split('_');
+                    if (delen.length >= 5) {
+                        const bestandenLijst = [];
+                        for await (const [bestandsNaam, bestandHandle] of handle.entries()) {
+                            if (bestandHandle.kind === 'file') bestandenLijst.push({ handle: bestandHandle, bestandsNaam: bestandsNaam });
+                        }
+                        if (bestandenLijst.length > 0) {
+                            alleBeschikbare.push({ index: parseInt(delen[1]), r: parseInt(delen[3]), g: parseInt(delen[4]), b: parseInt(delen[5]), bestanden: bestandenLijst, currentIdx: 0 });
+                        }
+                    }
+                }
+            }
+            if (alleBeschikbare.length === 0) { statusLabel.innerText = "Fout / Error"; btnStart.disabled = false; return; }
+            const beschikbareKleurenMap = new Map();
+            alleBeschikbare.forEach(d => beschikbareKleurenMap.set(d.index, d));
+
+            await new Promise(r => setTimeout(r, 100));
+
+            globaleAantalRijen = Math.floor(globaleKolommen * (schilderImgObj.height / schilderImgObj.width));
+            const blokGrootteX = schilderImgObj.width / globaleKolommen;
+            const blokGrootteY = schilderImgObj.height / globaleAantalRijen;
+
+            const canvas = document.getElementById('analyseCanvas');
+            canvas.width = schilderImgObj.width; canvas.height = schilderImgObj.height;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(schilderImgObj, 0, 0);
+
+            const container = document.getElementById('mosaicContainer');
+            container.innerHTML = ''; 
+            container.style.gridTemplateColumns = `repeat(${globaleKolommen}, ${globaleGrootte}px)`;
+            container.style.gridAutoRows = `${globaleGrootte}px`;
+            container.style.width = `${globaleKolommen * globaleGrootte}px`;
+
+            const optieOntbrekend = document.getElementById('optieOntbrekend').value;
+
+            for (let y = 0; y < globaleAantalRijen; y++) {
+                for (let x = 0; x < globaleKolommen; x++) {
+                    const tempCanvas = document.createElement('canvas'); tempCanvas.width = 1; tempCanvas.height = 1;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(canvas, x * blokGrootteX, y * blokGrootteY, blokGrootteX, blokGrootteY, 0, 0, 1, 1);
+                    const pData = tempCtx.getImageData(0, 0, 1, 1).data;
+                    
+                    let bestVGA = vgaPalet[0], minAfstandTotVGA = Infinity;
+                    for (let j = 0; j < vgaPalet.length; j++) {
+                        let dist = rgbAfstandRedmean(pData[0], pData[1], pData[2], vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
+                        if (dist < minAfstandTotVGA) { minAfstandTotVGA = dist; bestVGA = vgaPalet[j]; }
+                    }
+
+                    const wrapper = document.createElement('div'); wrapper.className = 'tegel-wrapper';
+                    let tegelState = { x, y, vga: bestVGA, type: 'missing' };
+
+                    if (beschikbareKleurenMap.has(bestVGA.index)) {
+                        const mData = beschikbareKleurenMap.get(bestVGA.index);
+                        const fileObj = mData.bestanden[mData.currentIdx];
+                        mData.currentIdx = (mData.currentIdx + 1) % mData.bestanden.length;
+                        tegelState.type = 'found'; tegelState.fileObj = fileObj;
+                        const imgTegel = document.createElement('img');
+                        const objectURL = URL.createObjectURL(await fileObj.handle.getFile());
+                        imgTegel.src = objectURL;
+                        wrapper.onclick = () => openStudioModal(objectURL, `VGA Index ${mData.index}`);
+                        wrapper.appendChild(imgTegel);
+                    } else {
+                        if (optieOntbrekend === 'toon_vakje') {
+                            tegelState.type = 'diagnose';
+                            const divMissend = document.createElement('div'); divMissend.className = 'ontbrekend';
+                            divMissend.style.backgroundColor = `rgb(${bestVGA.r}, ${bestVGA.g}, ${bestVGA.b})`;
+                            divMissend.innerText = "?"; wrapper.appendChild(divMissend);
+                        } else {
+                            let bestFallback = alleBeschikbare[0], minAfstandFallback = Infinity;
+                            for (const k of alleBeschikbare) {
+                                let dist = rgbAfstandRedmean(pData[0], pData[1], pData[2], k.r, k.g, k.b);
+                                if (dist < minAfstandFallback) { minAfstandFallback = dist; bestFallback = k; }
+                            }
+                            const fileObj = bestFallback.bestanden[bestFallback.currentIdx];
+                            bestFallback.currentIdx = (bestFallback.currentIdx + 1) % bestFallback.bestanden.length;
+                            tegelState.type = 'fallback'; tegelState.fileObj = fileObj; tegelState.fallbackVga = bestFallback;
+                            const imgTegel = document.createElement('img');
+                            const objectURL = URL.createObjectURL(await fileObj.handle.getFile());
+                            imgTegel.src = objectURL;
+                            wrapper.onclick = () => openStudioModal(objectURL, `Fallback Index ${bestFallback.index}`);
+                            wrapper.appendChild(imgTegel);
+                        }
+                    }
+                    container.appendChild(wrapper);
+                    globaleGridState.push(tegelState);
+                }
+            }
+            statusLabel.innerText = "100%";
+            btnStart.disabled = false; 
+            document.getElementById('exportSectie').style.display = 'block'; 
+            switchTab('tab-resultaat');
+        }
+
+        async function voerStudioExportUit() {
+            const statusLabel = document.getElementById('schilderStatus');
+            try {
+                const exportDir = await window.showDirectoryPicker({ mode: 'readwrite' });
+                const thumbDir = await exportDir.getDirectoryHandle('thumbnails', { create: true });
+                const origDir = await exportDir.getDirectoryHandle('originals', { create: true });
+                statusLabel.innerText = getTxt('dyn_export_bezig');
+                const projNaam = document.getElementById('projectNaamInput').value || "VGA Mozaïek";
+
+                let htmlContent = `<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>${projNaam}</title>
+                <style>
+                    body { background: #0b0b0c; text-align: center; margin: 0; padding: 30px; font-family: sans-serif; color: white; }
+                    .grid-container { display: grid; grid-template-columns: repeat(${globaleKolommen}, ${globaleGrootte}px); grid-auto-rows: ${globaleGrootte}px; justify-content: center; margin: 20px auto; width: ${globaleKolommen * globaleGrootte}px; gap:0; box-shadow: 0 10px 40px rgba(0,0,0,0.8);}
+                    .tegel-wrapper { width: 100%; height: 100%; cursor: pointer; transition: transform 0.15s; }
+                    .tegel-wrapper:hover { transform: scale(3.5); z-index: 10; position: relative; box-shadow: 0 0 12px rgba(255,255,255,0.9); outline: 1px solid #fff; }
+                    .tegel-wrapper img { width: 100%; height: 100%; display: block; object-fit: cover; }
+                    .ontbrekend { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; border: 1px solid rgba(255,255,255,0.2); box-sizing: border-box; overflow:hidden;}
+                    #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 100; justify-content: center; align-items: center; flex-direction: column; }
+                    #modal img { max-width: 512px; max-height: 512px; border: 2px solid #555; }
+                    #modal-tekst { margin-top: 15px; color: white; background: #222; padding: 10px 20px; border-radius: 5px; font-family: monospace; }
+                </style></head><body>
+                <h2>${projNaam}</h2><div class="grid-container">
+`;
+
+                const verwerkteBestanden = new Set();
+                const THUMB_SIZE = 64; 
+                const canvasThumb = document.createElement('canvas'); canvasThumb.width = THUMB_SIZE; canvasThumb.height = THUMB_SIZE;
+                const ctxThumb = canvasThumb.getContext('2d');
+
+                for (let i = 0; i < globaleGridState.length; i++) {
+                    const tegel = globaleGridState[i];
+                    if (tegel.type === 'diagnose') {
+                        htmlContent += `<div class="tegel-wrapper"><div class="ontbrekend" style="background-color: rgb(${tegel.vga.r},${tegel.vga.g},${tegel.vga.b});">?</div></div>
+`;
+                    } else {
+                        const exportNaam = `VGA_${tegel.type === 'fallback' ? tegel.fallbackVga.index : tegel.vga.index}_${tegel.fileObj.bestandsNaam}`;
+                        if (!verwerkteBestanden.has(exportNaam)) {
+                            verwerkteBestanden.add(exportNaam);
+                            const fileData = await tegel.fileObj.handle.getFile();
+                            
+                            const origFileHandle = await origDir.getFileHandle(exportNaam, { create: true });
+                            const origWritable = await origFileHandle.createWritable();
+                            await origWritable.write(fileData); await origWritable.close();
+                            
+                            const imgBitmap = await createImageBitmap(fileData);
+                            ctxThumb.clearRect(0,0,THUMB_SIZE,THUMB_SIZE); ctxThumb.drawImage(imgBitmap, 0, 0, THUMB_SIZE, THUMB_SIZE);
+                            const blobThumb = await new Promise(res => canvasThumb.toBlob(res, 'image/jpeg', 0.8));
+                            const thumbFileHandle = await thumbDir.getFileHandle(exportNaam, { create: true });
+                            const thumbWritable = await thumbFileHandle.createWritable();
+                            await thumbWritable.write(blobThumb); await thumbWritable.close();
+                        }
+                        htmlContent += `<div class="tegel-wrapper" onclick="openModal('originals/${exportNaam}', 'Bestand: ${exportNaam}')"><img src="thumbnails/${exportNaam}"></div>
+`;
+                    }
+                }
+                htmlContent += `</div><div id="modal" onclick="sluitModal(event)"><img id="groteFoto" src=""><div id="modal-tekst"></div></div>
+                <script>function openModal(src, txt) { document.getElementById('groteFoto').src = src; document.getElementById('modal-tekst').innerText = txt; document.getElementById('modal').style.display = 'flex'; }
+                function sluitModal(e) { if(e.target.id === 'modal') document.getElementById('modal').style.display = 'none'; }<\/script></body></html>`;
+
+                const htmlFileHandle = await exportDir.getFileHandle('index.html', { create: true });
+                const htmlWritable = await htmlFileHandle.createWritable();
+                await htmlWritable.write(htmlContent); await htmlWritable.close();
+                statusLabel.innerText = "✅ 100% Geëxporteerd als HTML!";
+            } catch (error) {}
+        }
+
+        // --- NIEUW: JPG EXPORT LOGICA ---
+        async function exporteerAlsJPG() {
+            const statusLabel = document.getElementById('schilderStatus');
+            statusLabel.innerText = getTxt('dyn_jpg_bezig');
+            
+            try {
+                // Hoge resolutie voor export (bijv. 64x64 per vakje)
+                const TILE_RES = 64; 
+                
+                // Creëer een reusachtig, onzichtbaar canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = globaleKolommen * TILE_RES;
+                canvas.height = globaleAantalRijen * TILE_RES;
+                const ctx = canvas.getContext('2d');
+                
+                // Achtergrond op zwart zetten voor de zekerheid
+                ctx.fillStyle = '#0b0b0c';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < globaleGridState.length; i++) {
+                    const tegel = globaleGridState[i];
+                    
+                    if (tegel.type === 'diagnose') {
+                        // Ontbrekend vakje tekenen
+                        ctx.fillStyle = `rgb(${tegel.vga.r}, ${tegel.vga.g}, ${tegel.vga.b})`;
+                        ctx.fillRect(tegel.x * TILE_RES, tegel.y * TILE_RES, TILE_RES, TILE_RES);
+                        
+                        // Een vraagteken in het midden
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 24px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('?', tegel.x * TILE_RES + TILE_RES/2, tegel.y * TILE_RES + TILE_RES/2);
+                    } else {
+                        // Daadwerkelijke foto intekenen
+                        const fileData = await tegel.fileObj.handle.getFile();
+                        const imgBitmap = await createImageBitmap(fileData);
+                        
+                        // Zorg dat de uitsnede vierkant wordt vanuit het midden, net als in de echte weergave
+                        const size = Math.min(imgBitmap.width, imgBitmap.height);
+                        const startX = (imgBitmap.width - size) / 2;
+                        const startY = (imgBitmap.height - size) / 2;
+                        
+                        ctx.drawImage(imgBitmap, startX, startY, size, size, tegel.x * TILE_RES, tegel.y * TILE_RES, TILE_RES, TILE_RES);
+                    }
+                }
+
+                // Genereer de download link
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    
+                    const projNaam = document.getElementById('projectNaamInput').value || "VGA_Mozaiek";
+                    // Verwijder spaties en vreemde tekens uit de bestandsnaam
+                    const veiligeNaam = projNaam.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                    
+                    a.download = veiligeNaam + "_high_res.jpg";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    statusLabel.innerText = "✅ JPG succesvol gedownload!";
+                }, 'image/jpeg', 0.95); // 0.95 = Zeer hoge JPG kwaliteit
+
+            } catch (error) {
+                statusLabel.innerText = "Fout bij JPG export: " + error.message;
+            }
+        }
+
+        function openStudioModal(bron, tekst) {
+            document.getElementById('groteFoto').src = bron; 
+            document.getElementById('modal-tekst').innerText = tekst; 
+            document.getElementById('modal').style.display = 'flex';
+        }
+        function sluitStudioModal(e) { 
+            if (e.target.id === 'modal' || e.target.id === 'modal-tekst') document.getElementById('modal').style.display = 'none'; 
+        }
+    </script>
+</body>
+</html>
