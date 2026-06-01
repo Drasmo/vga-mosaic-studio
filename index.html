@@ -5,7 +5,7 @@
     <title>VGA Mozaïek Studio Pro</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121214; color: #e2e8f0; margin: 0; padding: 0; overflow-x: hidden; }
-        
+
         .tab-nav { display: flex; justify-content: center; align-items: center; background-color: #1a1a1e; border-bottom: 2px solid #2d2d34; position: sticky; top: 0; z-index: 1000; min-height: 60px; }
         .lang-selector { position: absolute; left: 20px; }
         .lang-selector select { padding: 8px 12px; background-color: #2d3748; color: white; border: 1px solid #4a5568; border-radius: 4px; font-weight: bold; cursor: pointer; }
@@ -18,13 +18,13 @@
         .panel { background: #1e1e24; padding: 25px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); box-sizing: border-box; }
         .studio-title { text-align: center; color: #f1c40f; margin-top: 0; margin-bottom: 10px; }
         .uitleg { font-size: 14px; color: #94a3b8; background: #141419; padding: 15px; border-radius: 6px; margin-bottom: 25px; line-height: 1.6; border-left: 4px solid #3498db; }
-        
+
         button, select, input[type="text"] { background-color: #3498db; color: white; border: none; padding: 12px 20px; margin: 8px 0; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.2s; width: 100%; box-sizing: border-box; font-weight: bold; }
         input[type="text"] { background-color: #2d3748; border: 1px solid #4a5568; cursor: text; }
         button:hover, select:hover { background-color: #2980b9; }
         button:disabled { background-color: #4a4a5a; cursor: not-allowed; color: #71717a; }
         select { background-color: #2d3748; border: 1px solid #4a5568; font-weight: normal; color: #fff; }
-        
+
         .lbl-status-info { font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 15px; text-align: center; font-style: italic; }
         .status-box { margin-top: 20px; padding: 15px; background: #14213d; border-left: 4px solid #f1c40f; border-radius: 4px; font-family: monospace; font-size: 13px; color: #e5e5e5; }
 
@@ -79,16 +79,17 @@
         <button class="tab-btn" id="btn-tab-resultaat" onclick="switchTab('tab-resultaat')" data-i18n="tab_resultaat">✨ Eindresultaat</button>
     </div>
 
+
     <div id="tab-start" class="tab-content active">
         <div class="panel" style="max-width: 800px; margin: 0 auto; text-align: left;">
             <h2 class="studio-title" data-i18n="start_titel">Welkom bij de VGA Mozaïek Studio</h2>
             <p data-i18n="start_intro">Deze studio helpt je om elke foto om te toveren tot een prachtig interactief mozaïek, opgebouwd uit jouw eigen afbeeldingen in een 256-kleuren VGA palet. Het proces bestaat uit 3 simpele stappen:</p>
             <h3 style="color: #3498db;" data-i18n="start_stap1_titel">Stap 1: De Verffabriek (Database Maken)</h3>
-            <p data-i18n="start_stap1_text">Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's (bijv. vakantiefoto's of screenshots) in. Het algoritme analyseert de menselijke 'Redmean' kleur van elke foto en verdeelt ze automatisch in maximaal 256 kleurmappen. <em>Tip: Gebruik gevarieerde foto's (licht, donker, kleurrijk) voor het beste resultaat.</em></p>
+            <p data-i18n="start_stap1_text">Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's (bijv. vakantiefoto's of screenshots) in. Het algoritme analyseert de dominante kleur via geavanceerde color-clustering verdeling en verdeelt ze automatisch over de juiste kleurmappen. <em>Afgekeurde, rommelige foto's gaan netjes naar een Trash-map.</em></p>
             <h3 style="color: #27ae60;" data-i18n="start_stap2_titel">Stap 2: De Schilder Studio (Mozaïek Bouwen)</h3>
             <p data-i18n="start_stap2_text">Kies je doelfoto (het kunstwerk dat je wilt namaken) en koppel de database die je in Stap 1 hebt gemaakt. Gebruik de live preview om de perfecte resolutie te bepalen. Klik op bouwen en de browser weeft jouw foto's aan elkaar tot één groot raster.</p>
             <h3 style="color: #e67e22;" data-i18n="start_stap3_titel">Stap 3: Het Eindresultaat (Exporteren)</h3>
-            <p data-i18n="start_stap3_text">Bekijk het gegenereerde meesterwerk. Tevreden? Geef je project een naam en exporteer het. Je kunt het project opslaan als HTML of direct als een JPG afbeelding van hoge kwaliteit downloaden.</p>
+            <p data-i18n="start_stap3_text">Bekijk het gegenereerde meesterwerk. Tevreden? Geef je project een naam en exporteer het. Je kunt het project opslaan als HTML of direct als een JPG afbeelding van hoge kwaliteit downloaden inclusief optionele fotoblend.</p>
             <div style="text-align: center; margin-top: 30px;">
                 <button onclick="switchTab('tab-sorteerder')" style="width: auto; padding: 15px 40px; font-size: 16px; background-color: #f1c40f; color: #111;" data-i18n="start_btn">Start met de Verffabriek</button>
             </div>
@@ -98,16 +99,150 @@
     <div id="tab-sorteerder" class="tab-content">
         <div class="panel" style="max-width: 700px; margin: 0 auto;">
             <h2 class="studio-title" data-i18n="sorteer_titel">🎨 VGA Verffabriek</h2>
-            <div class="uitleg" data-i18n="sorteer_uitleg"><strong>Dominante Kleuranalyse (Geoptimaliseerd 16x16 & Redmean):</strong><br>Selecteer hier je bronafbeeldingen. Dit script scant elke foto via een stemsysteem en plaatst ze in de exacte VGA-kleurmap.</div>
+            <div class="uitleg" data-i18n="sorteer_uitleg"><strong>Perceptuele Kleuranalyse (HSL Toon-Dominantie v3):</strong><br>De fabriek bepaalt de <em>visueel dominante toon</em> per foto via een Hue-histogram. Grijze, witte en zwarte beelden worden als neutrale categorie apart behandeld. Alleen échte botsende complementaire kleuren (&gt;35% tegenovergesteld op de kleurencirkel) gaan naar Trash. Bijna alle foto's met een herkenbaar kleurgevoel worden geaccepteerd.</div>
             <button onclick="kiesSorteerInput()" data-i18n="sorteer_btn_input">1. Kies bronafbeeldingen (Meerdere selecteren)</button>
             <div style="text-align: center; margin-bottom: 15px;"><span id="lblSorteerInput" class="lbl-status-info" data-i18n="lbl_geen_bestanden">Geen bestanden geselecteerd</span></div>
-            <button onclick="kiesSorteerOutput()" data-i18n="sorteer_btn_output">2. Kies of maak de 'VGA_Database' hoofdmap</button>
-            <div style="text-align: center; margin-bottom: 15px;"><span id="lblSorteerOutput" class="lbl-status-info" data-i18n="lbl_geen_doelmap">Nog geen doelmap gekoppeld</span></div>
-            <button id="btnStartSorteren" class="btn-start" onclick="startSorteerProces()" disabled data-i18n="sorteer_btn_start">3. Start Sorteren & Categoriseren</button>
+            <button onclick="koppelGlobaleDatabase()" data-i18n="sorteer_btn_output">2. Kies of maak de 'VGA_Database' hoofdmap</button>
+            <div style="text-align: center; margin-bottom: 15px; display:flex; justify-content:center; align-items:center; gap:12px;">
+                <span id="lblSorteerOutput" class="lbl-status-info" data-i18n="lbl_geen_doelmap">Nog geen doelmap gekoppeld</span>
+                <span id="lblGlobaleTotaal" style="color:#f1c40f; font-size:12px; font-weight:bold;"></span>
+            </div>
+            <button id="btnStartSorteren" class="btn-start" onclick="startSorteerProces()" disabled data-i18n="sorteer_btn_start">3. Start Sorteren &amp; Categoriseren</button>
             <div id="sorteerStatusBox" class="status-box" style="display: none;"><strong data-i18n="status_titel">Status:</strong><br><span id="sorteerStatusTekst">Klaar om te starten...</span></div>
         </div>
+
+        <div class="panel" style="max-width: 1300px; margin: 30px auto 0 auto;">
+            <h2 class="studio-title">&#128202; Database Overzicht</h2>
+            <div class="uitleg" style="margin-bottom: 20px;">
+                Koppel je VGA-database map om te zien hoeveel afbeeldingen per kleur aanwezig zijn.
+                <span style="display:inline-block; margin-left:8px; font-size:12px;">
+                    <span style="background:#1a3a1a; color:#7fff7f; padding:2px 6px; border-radius:3px; font-weight:bold;">3–99</span> Goed &nbsp;
+                    <span style="background:#3a2a00; color:#ffcc44; padding:2px 6px; border-radius:3px; font-weight:bold;">1–2</span> Te weinig &nbsp;
+                    <span style="background:#111; color:#444; padding:2px 6px; border-radius:3px; font-weight:bold;">0</span> Leeg &nbsp;
+                    <span style="background:#3a0000; color:#ff7777; padding:2px 6px; border-radius:3px; font-weight:bold;">100+</span> Overvol
+                </span>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:18px; flex-wrap:wrap;">
+                <button onclick="scanDatabaseOverzicht()" style="width:auto; padding:10px 22px; background:#3498db;">&#128260; Herlaad Database Overzicht</button>
+                <span id="lblOverzichtMap" style="color:#94a3b8; font-size:13px; font-style:italic;"></span>
+                <span id="lblOverzichtTotaal" style="color:#f1c40f; font-size:13px; font-weight:bold; margin-left:auto;"></span>
+            </div>
+            <div id="overzichtLaadStatus" style="display:none; color:#f1c40f; font-size:13px; margin-bottom:10px;">&#9203; Database scannen...</div>
+            
+            <div id="balanceerSectie" style="display:none; margin-bottom:14px; background:#14213d; border-left:4px solid #e67e22; border-radius:4px; padding:14px 18px;">
+                <div style="font-weight:bold; color:#e67e22; margin-bottom:8px;">&#9878; Slimme Balancering — Overvol mappen uitdunnen</div>
+                <div style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.6;">
+                    Foto's in mappen met <strong>100+ afbeeldingen</strong> worden geanalyseerd op een tweede dominante kleur.
+                    Als die tweede kleur past in een map met minder dan 99 foto's, wordt de afbeelding daarheen verplaatst.<br>
+                    <span style="font-size:12px; color:#94a3b8;">Foto's zonder bruikbare tweede kleur blijven in hun huidige map.</span>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button onclick="startBalancering()" style="width:auto; padding:10px 24px; background:#e67e22; font-size:14px;">&#9878; Start Balancering</button>
+                    <span id="lblBalanceerStatus" style="color:#94a3b8; font-size:13px; font-style:italic;"></span>
+                </div>
+                <div id="balanceerLog" style="display:none; margin-top:12px; font-family:monospace; font-size:12px; color:#e5e5e5; background:#0d1117; padding:10px; border-radius:4px; max-height:180px; overflow-y:auto; line-height:1.8;"></div>
+            </div>
+
+            <div id="detailJagerSectie" style="display:none; margin-bottom:14px; background:#14213d; border-left:4px solid #8e44ad; border-radius:4px; padding:14px 18px;">
+                <div style="font-weight:bold; color:#8e44ad; margin-bottom:8px;">🔍 2e Ronde: Detail-Jager (Gericht Gaten Vullen)</div>
+                <div style="font-size:13px; color:#cbd5e1; margin-bottom:12px; line-height:1.6;">
+                    Selecteer nieuwe foto's. Het algoritme zoekt hierin <strong>uitsluitend</strong> naar kleuren waarvan we er <strong>minder dan 10</strong> hebben. Grote objecten (min. 512px) worden automatisch uitgesneden. Te kleine details worden genegeerd.
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button onclick="startGerichteDetailJager()" style="width:auto; padding:10px 24px; background:#8e44ad; font-size:14px;">🔍 Selecteer foto's & Start Zoektocht</button>
+                    <span id="lblDetailStatus" style="color:#94a3b8; font-size:13px; font-style:italic;"></span>
+                </div>
+                <div id="detailLog" style="display:none; margin-top:12px; font-family:monospace; font-size:12px; color:#e5e5e5; background:#0d1117; padding:10px; border-radius:4px; max-height:180px; overflow-y:auto; line-height:1.8;"></div>
+            </div>
+
+            <div id="kleurmijnSectie" style="display:none; margin-bottom:14px; background:#14213d; border-left:4px solid #27ae60; border-radius:4px; padding:14px 18px;">
+                <div style="font-weight:bold; color:#27ae60; margin-bottom:8px;">&#9935; Stap 4: Kleurmijnen — Verborgen kleuren opgraven uit volle mappen</div>
+                <div style="font-size:13px; color:#cbd5e1; margin-bottom:16px; line-height:1.6;">
+                    Doorzoekt alle mappen met <strong>100+ foto's</strong> op verborgen tweede en derde kleuren.
+                    Als die passen bij een <strong>lege of dunne map</strong> wordt de foto daarheen <em>verplaatst</em>.
+                    Gebruik de schuifbalken om meer of minder foto's te vangen.
+                </div>
+
+                <div class="slider-groep" style="margin-bottom:12px;">
+                    <label style="background:none; padding:0; width:auto; color:#cbd5e1;">
+                        <span>&#127752; Kleursterkte-drempel (Saturatie)</span>
+                        <span id="valSaturatie" style="color:#27ae60; font-weight:bold;">0.06</span>
+                    </label>
+                    <input type="range" id="sliderSaturatie" min="1" max="30" value="6"
+                        oninput="document.getElementById('valSaturatie').innerText = (this.value/100).toFixed(2)">
+                    <div style="font-size:11px; color:#64748b; line-height:1.5; margin-top:4px;">
+                        Hoe <strong>laag</strong> je dit zet, hoe meer gedempte kleuren worden opgepikt — lavendel, rookblauw, grijspaars.
+                        Hoog = alleen duidelijk gekleurde vlakken tellen mee. Begin laag (0.06) en schuif omhoog als je te veel ruis krijgt.
+                    </div>
+                </div>
+
+                <div class="slider-groep" style="margin-bottom:12px;">
+                    <label style="background:none; padding:0; width:auto; color:#cbd5e1;">
+                        <span>&#127775; Kleurzone primaire toon (Hue-tolerantie)</span>
+                        <span id="valHueTol" style="color:#27ae60; font-weight:bold;">70°</span>
+                    </label>
+                    <input type="range" id="sliderHueTol" min="30" max="120" value="70"
+                        oninput="document.getElementById('valHueTol').innerText = this.value + '°'">
+                    <div style="font-size:11px; color:#64748b; line-height:1.5; margin-top:4px;">
+                        Bepaalt hoe breed de <strong>dominante kleur</strong> van een foto wordt afgeschermd.
+                        Bij 70° wordt alles binnen 70° van de hoofdkleur genegeerd bij het zoeken naar een tweede kleur.
+                        Lager = strenger (meer tweede kleuren worden gevonden maar kunnen op de hoofdkleur lijken).
+                        Hoger = alleen écht andere kleuren tellen als tweede kleur.
+                    </div>
+                </div>
+
+                <div class="slider-groep" style="margin-bottom:16px;">
+                    <label style="background:none; padding:0; width:auto; color:#cbd5e1;">
+                        <span>&#128270; Minimale toonsterkte tweede kleur</span>
+                        <span id="valToonsterkte" style="color:#27ae60; font-weight:bold;">8%</span>
+                    </label>
+                    <input type="range" id="sliderToonsterkte" min="2" max="40" value="8"
+                        oninput="document.getElementById('valToonsterkte').innerText = this.value + '%'">
+                    <div style="font-size:11px; color:#64748b; line-height:1.5; margin-top:4px;">
+                        De tweede kleur moet minstens dit percentage van alle kleurpixels vertegenwoordigen.
+                        Laag (2–5%) = ook een klein beetje paars in een hoek telt al mee.
+                        Hoog (20%+) = alleen als de tweede kleur écht prominent aanwezig is in de foto.
+                        Begin op 8% en ga lager als je te weinig resultaten krijgt.
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+                    <label style="font-size:13px; color:#cbd5e1; white-space:nowrap; width:auto; padding:0; margin:0; background:none;">Max verplaatsingen per schaarse kleur:</label>
+                    <select id="kleurmijnMaxKopie" style="width:auto; padding:6px 12px; margin:0; font-size:13px;">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <label style="font-size:13px; color:#cbd5e1; white-space:nowrap; width:auto; padding:0; margin:0; background:none;">Doelgrens (kleuren onder):</label>
+                    <select id="kleurmijnDoelgrens" style="width:auto; padding:6px 12px; margin:0; font-size:13px;">
+                        <option value="5">5 foto's</option>
+                        <option value="10" selected>10 foto's</option>
+                        <option value="20">20 foto's</option>
+                        <option value="50">50 foto's</option>
+                    </select>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button onclick="startKleurmijn()" style="width:auto; padding:10px 24px; background:#27ae60; font-size:14px;">&#9935; Start Kleurmijnen</button>
+                    <span id="lblKleurmijnStatus" style="color:#94a3b8; font-size:13px; font-style:italic;"></span>
+                </div>
+                <div id="kleurmijnLog" style="display:none; margin-top:12px; font-family:monospace; font-size:12px; color:#e5e5e5; background:#0d1117; padding:10px; border-radius:4px; max-height:220px; overflow-y:auto; line-height:1.8;"></div>
+            </div>
+
+            <div id="dbOverzichtContainer" style="display:none;"></div>
+
+            <div id="mapInspectiePaneel" style="display:none; margin-top:16px; background:#0d1117; border:1px solid #27ae60; border-radius:6px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div id="mapInspectieTitel" style="font-weight:bold; color:#27ae60; font-size:14px;"></div>
+                    <button onclick="document.getElementById('mapInspectiePaneel').style.display='none'" style="width:auto; padding:4px 14px; background:#333; font-size:12px; margin:0;">✕ Sluiten</button>
+                </div>
+                <div id="mapInspectieInhoud" style="display:flex; flex-wrap:wrap; gap:6px; max-height:420px; overflow-y:auto;"></div>
+            </div>
+        </div>
+
         <canvas id="sorteerWerkCanvas" width="512" height="512" style="display:none;"></canvas>
-        <canvas id="sorteerScanCanvas" width="16" height="16" style="display:none;"></canvas>
+        <canvas id="sorteerScanCanvas" width="8" height="8" style="display:none;"></canvas>
+        <canvas id="balanceerScanCanvas" width="16" height="16" style="display:none;"></canvas>
     </div>
 
     <div id="tab-schilder" class="tab-content">
@@ -121,8 +256,9 @@
                 <h2 class="studio-title" data-i18n="schilder_titel">🖼️ Mozaïek Configurator</h2>
                 <button onclick="kiesSchilderDoel()" data-i18n="schilder_btn_doel">1. Kies Doelfoto</button>
                 <div style="text-align: center; margin-bottom: 10px;"><span id="lblSchilderDoel" class="lbl-status-info" data-i18n="lbl_geen_foto">Geen foto gekozen</span></div>
-                <button onclick="kiesSchilderDatabase()" data-i18n="schilder_btn_db">2. Koppel VGA Database Map</button>
-                <div style="text-align: center; margin-bottom: 10px;"><span id="lblSchilderDB" class="lbl-status-info" data-i18n="lbl_geen_db">Geen database gekoppeld</span></div>
+                <div style="background:#1a2a1a; border:1px solid #2d4a2d; border-radius:5px; padding:10px 14px; margin:8px 0 10px 0; font-size:13px; color:#7fff7f;">
+                    &#128194; Database: <span id="lblSchilderDB" style="color:#f1c40f; font-weight:bold;">Nog niet gekoppeld</span>
+                </div>
 
                 <label style="font-size: 13px; margin-top: 10px; display: block; color: #cbd5e1;" data-i18n="schilder_lbl_missend">3. Wat te doen bij ontbrekende kleuren?</label>
                 <select id="optieOntbrekend">
@@ -133,7 +269,11 @@
                 <div class="slider-groep">
                     <label><span data-i18n="schilder_lbl_kolommen">Raster (Aantal Kolommen)</span> <span id="valResTekst" style="color:#f1c40f; font-weight:bold;">80</span></label>
                     <input type="range" id="sliderRes" min="30" max="150" value="80" oninput="updateLivePreviewStudio()">
-                    <label><span data-i18n="schilder_lbl_grootte">Tegelgrootte op Scherm (Pixels)</span></label>
+
+                    <label style="margin-top: 15px;"><span data-i18n="schilder_lbl_overlay">Overlay Origineel in JPG (Blend)</span> <span id="valOverlayTekst" style="color:#f1c40f; font-weight:bold;">30%</span></label>
+                    <input type="range" id="sliderOverlay" min="0" max="100" value="30" oninput="document.getElementById('valOverlayTekst').innerText = this.value + '%'">
+
+                    <label style="margin-top: 15px;"><span data-i18n="schilder_lbl_grootte">Tegelgrootte op Scherm (Pixels)</span></label>
                     <select id="optieGrootte" onchange="updateLivePreviewStudio()">
                         <option value="8">8x8</option>
                         <option value="16" selected>16x16</option>
@@ -146,12 +286,11 @@
                 </div>
 
                 <button id="btnStartSchilderen" class="btn-start" onclick="voerSchilderWerkUit()" disabled data-i18n="schilder_btn_start">4. Bouw Interactief Mozaïek</button>
-                
+
                 <div id="exportSectie" style="display: none; background: #2d2d34; padding: 15px; border-radius: 6px; margin-top: 15px; border: 1px solid #f1c40f;">
                     <label style="font-size: 12px; color: #cbd5e1; margin-bottom: 5px; display:block;" data-i18n="export_naam_lbl">Project Naam:</label>
                     <input type="text" id="projectNaamInput" value="Mijn Draagbare VGA Mozaïek">
                     <button id="btnExportStudio" class="btn-export" onclick="voerStudioExportUit()" data-i18n="schilder_btn_export">5a. Exporteer interactief HTML Project</button>
-                    <!-- NIEUW: JPG EXPORT KNOP -->
                     <button id="btnExportJPG" class="btn-export btn-export-jpg" onclick="exporteerAlsJPG()" data-i18n="export_jpg_btn">5b. Download als enkele JPG (Print-kwaliteit)</button>
                 </div>
                 <div id="schilderStatus" style="color: #f1c40f; margin-top: 15px; font-style: italic; text-align: center; font-weight: bold;" data-i18n="status_klaar">Klaar voor invoer.</div>
@@ -191,14 +330,14 @@
                 start_titel: "Welkom bij de VGA Mozaïek Studio",
                 start_intro: "Deze studio helpt je om elke foto om te toveren tot een prachtig interactief mozaïek, opgebouwd uit jouw eigen afbeeldingen in een 256-kleuren VGA palet. Het proces bestaat uit 3 simpele stappen:",
                 start_stap1_titel: "Stap 1: De Verffabriek (Database Maken)",
-                start_stap1_text: "Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's in. Het algoritme analyseert de menselijke 'Redmean' kleur van elke foto en verdeelt ze automatisch in maximaal 256 kleurmappen. <em>Tip: Gebruik gevarieerde foto's voor het beste resultaat.</em>",
+                start_stap1_text: "Voordat je kunt schilderen, heb je verf nodig. In de <strong>Verffabriek</strong> voer je je eigen foto's in. Het algoritme analyseert de dominante kleur via color-clustering en verdeelt ze automatisch. <em>Afgekeurde foto's gaan naar de Trash-map.</em>",
                 start_stap2_titel: "Stap 2: De Schilder Studio (Mozaïek Bouwen)",
                 start_stap2_text: "Kies je doelfoto en koppel de database die je in Stap 1 hebt gemaakt. Gebruik de live preview om de perfecte resolutie te bepalen. Klik op bouwen en de browser weeft jouw foto's aan elkaar.",
                 start_stap3_titel: "Stap 3: Het Eindresultaat (Exporteren)",
                 start_stap3_text: "Bekijk het gegenereerde meesterwerk. Tevreden? Geef je project een naam en exporteer het. Je kunt het project opslaan als interactief HTML pakket of direct als een hoge resolutie JPG downloaden voor print.",
                 start_btn: "Start met de Verffabriek",
                 sorteer_titel: "🎨 VGA Verffabriek",
-                sorteer_uitleg: "<strong>Dominante Kleuranalyse (Geoptimaliseerd 16x16 & Redmean):</strong><br>Selecteer hier je bronafbeeldingen. Dit script scant elke foto via een stemsysteem en plaatst ze in de exacte VGA-kleurmap.",
+                sorteer_uitleg: "<strong>Dominante Kleur Analyse (Color Clustering 8x8 & Chaos Filter):</strong><br>Selecteer je bronafbeeldingen. De fabriek groepeert de kleuren per foto. Foto's die de kwaliteitstest halen komen in een VGA-map, foto's met te veel ruis of extreem vloekende contrasten belanden in de 'Trash' map.",
                 sorteer_btn_input: "1. Kies bronafbeeldingen (Meerdere selecteren)",
                 lbl_geen_bestanden: "Geen bestanden geselecteerd",
                 sorteer_btn_output: "2. Kies of maak de 'VGA_Database' hoofdmap",
@@ -214,6 +353,7 @@
                 schilder_opt1: "Optie 2: Dichtstbijzijnde beschikbare kleur (Aanbevolen)",
                 schilder_opt2: "Optie 1: Toon diagnose-vakjes met vraagteken",
                 schilder_lbl_kolommen: "Raster (Aantal Kolommen)",
+                schilder_lbl_overlay: "Overlay Origineel in JPG (Blend)",
                 schilder_lbl_grootte: "Tegelgrootte op Scherm (Pixels)",
                 schilder_formaat: "Uiteindelijk Formaat:",
                 schilder_btn_start: "4. Bouw Interactief Mozaïek",
@@ -234,19 +374,19 @@
             en: {
                 tab_start: "🏠 Home", tab_sorteerder: "🎨 Paint Factory", tab_schilder: "🖼️ Painter Studio", tab_resultaat: "✨ Result Studio",
                 start_titel: "Welcome to the VGA Mosaic Studio",
-                start_intro: "This studio helps you transform any photo into a beautiful interactive mosaic, built from your own images in a 256-color VGA palette. The process consists of 3 simple steps:",
+                start_intro: "This studio helps you transform any photo into a beautiful interactive mosaic, built from your own images in a 256-color VGA palette.",
                 start_stap1_titel: "Step 1: The Paint Factory (Build Database)",
-                start_stap1_text: "Before painting, you need paint. In the <strong>Paint Factory</strong>, you input your own photos. The algorithm analyzes the perceptual 'Redmean' color and distributes them into up to 256 color folders. <em>Tip: Use varied photos for the best result.</em>",
+                start_stap1_text: "In the <strong>Paint Factory</strong>, you input your own photos. The algorithm uses color-clustering to sort them. Rejected photos go to the Trash folder.",
                 start_stap2_titel: "Step 2: Painter Studio (Build Mosaic)",
-                start_stap2_text: "Choose your target photo and link the database you created in Step 1. Use the live preview to determine the perfect resolution. Click build and let the browser weave your photos together.",
+                start_stap2_text: "Choose your target photo and link the database. Use the live preview and click build.",
                 start_stap3_titel: "Step 3: The Final Result (Export)",
-                start_stap3_text: "View the generated masterpiece. Satisfied? Give your project a name and export it. You can save the project as an interactive HTML package or download a high-res JPG directly for printing.",
+                start_stap3_text: "Export as interactive HTML or download a high-res JPG directly for printing.",
                 start_btn: "Start with the Paint Factory",
                 sorteer_titel: "🎨 VGA Paint Factory",
-                sorteer_uitleg: "<strong>Dominant Color Analysis (Optimized 16x16 & Redmean):</strong><br>Select your source images here. This script scans each photo and places it in the exact VGA color folder.",
-                sorteer_btn_input: "1. Choose source images (Multiple selection)",
+                sorteer_uitleg: "<strong>Color Clustering (8x8 & Chaos Filter):</strong> Select source images. Clean photos go to a VGA folder, noisy/clashing ones go to 'Trash'.",
+                sorteer_btn_input: "1. Choose source images",
                 lbl_geen_bestanden: "No files selected",
-                sorteer_btn_output: "2. Choose or create the 'VGA_Database' root folder",
+                sorteer_btn_output: "2. Choose 'VGA_Database' root folder",
                 lbl_geen_doelmap: "No target folder linked",
                 sorteer_btn_start: "3. Start Sorting & Categorizing",
                 status_titel: "Status:",
@@ -255,116 +395,119 @@
                 lbl_geen_foto: "No photo chosen",
                 schilder_btn_db: "2. Link VGA Database Folder",
                 lbl_geen_db: "No database linked",
-                schilder_lbl_missend: "3. What to do with missing colors?",
-                schilder_opt1: "Option 2: Use nearest available color (Recommended)",
-                schilder_opt2: "Option 1: Show diagnostic blocks with question marks",
-                schilder_lbl_kolommen: "Grid (Number of Columns)",
-                schilder_lbl_grootte: "Tile size on screen (Pixels)",
+                schilder_lbl_missend: "3. Missing colors behavior?",
+                schilder_opt1: "Option 2: Nearest available color",
+                schilder_opt2: "Option 1: Show diagnostic blocks",
+                schilder_lbl_kolommen: "Grid (Columns)",
+                schilder_lbl_overlay: "Original Overlay in JPG (Blend)",
+                schilder_lbl_grootte: "Tile size on screen",
                 schilder_formaat: "Final Size:",
                 schilder_btn_start: "4. Build Interactive Mosaic",
                 export_naam_lbl: "Project Name:",
-                schilder_btn_export: "5a. Export interactive HTML Project",
-                export_jpg_btn: "5b. Download as single JPG (Print quality)",
-                status_klaar: "Ready for input.",
+                schilder_btn_export: "5a. Export HTML Project",
+                export_jpg_btn: "5b. Download single JPG",
+                status_klaar: "Ready.",
                 schilder_paneel_links: "Original Photo",
                 schilder_paneel_rechts: "VGA Preview",
                 resultaat_titel: "✨ Interactive Exhibition Space",
-                resultaat_uitleg: "Hover over the mosaic to zoom in on individual tiles. Click a cell to view the original 512x512 image.",
-                resultaat_leeg: "No artwork generated yet. Go to tab '2. Painter Studio' to build a mosaic.",
-                dyn_bezig: "Heavy calculation in progress...",
-                dyn_export_bezig: "Copying project files and generating 64x64 thumbnails...",
-                def_project_naam: "My Portable VGA Mosaic",
-                dyn_jpg_bezig: "Generating high-res JPG... (This may take a moment)"
+                resultaat_uitleg: "Hover over the mosaic to zoom in. Click to view original.",
+                resultaat_leeg: "No artwork generated yet.",
+                dyn_bezig: "Calculating...",
+                dyn_export_bezig: "Generating thumbnails...",
+                def_project_naam: "My VGA Mosaic",
+                dyn_jpg_bezig: "Generating high-res JPG..."
             },
             de: {
-                tab_start: "🏠 Start", tab_sorteerder: "🎨 Farbfabrik", tab_schilder: "🖼️ Maler-Studio", tab_resultaat: "✨ Ergebnis-Studio",
+                tab_start: "🏠 Start", tab_sorteerder: "🎨 Farbfabrik", tab_schilder: "🖼️ Maler-Studio", tab_resultaat: "✨ Ergebnis",
                 start_titel: "Willkommen im VGA Mosaik Studio",
-                start_intro: "Dieses Studio hilft Ihnen, jedes Foto in ein wunderschönes interaktives Mosaik zu verwandeln, das aus Ihren eigenen Bildern in einer 256-Farben-VGA-Palette besteht. 3 einfache Schritte:",
-                start_stap1_titel: "Schritt 1: Die Farbfabrik (Datenbank erstellen)",
-                start_stap1_text: "In der <strong>Farbfabrik</strong> geben Sie Ihre eigenen Fotos ein. Der Algorithmus analysiert die 'Redmean'-Farbe und verteilt sie auf bis zu 256 Farbordner.",
-                start_stap2_titel: "Schritt 2: Maler-Studio (Mosaik bauen)",
-                start_stap2_text: "Wählen Sie Ihr Zielfoto und verknüpfen Sie die Datenbank aus Schritt 1. Nutzen Sie die Live-Vorschau. Klicken Sie auf Bauen.",
-                start_stap3_titel: "Schritt 3: Das Endergebnis (Exportieren)",
-                start_stap3_text: "Zufrieden? Geben Sie dem Projekt einen Namen und exportieren Sie es als interaktives HTML-Paket oder als hochauflösendes JPG für den Druck.",
-                start_btn: "Starten mit der Farbfabrik",
+                start_intro: "Verwandeln Sie jedes Foto in ein wunderschönes interaktives Mosaik.",
+                start_stap1_titel: "Schritt 1: Farbfabrik",
+                start_stap1_text: "Der Algorithmus nutzt Color-Clustering. Abgelehnte Fotos landen im Papierkorb.",
+                start_stap2_titel: "Schritt 2: Maler-Studio",
+                start_stap2_text: "Zielfoto wählen, Datenbank verknüpfen und bauen.",
+                start_stap3_titel: "Schritt 3: Exportieren",
+                start_stap3_text: "Als HTML oder als hochauflösendes JPG herunterladen.",
+                start_btn: "Starten",
                 sorteer_titel: "🎨 VGA Farbfabrik",
-                sorteer_uitleg: "Wählen Sie Ihre Quellbilder aus. Das Skript platziert sie in den genauen VGA-Farbordner.",
-                sorteer_btn_input: "1. Quellbilder wählen (Mehrere möglich)",
+                sorteer_uitleg: "<strong>Color Clustering (8x8 & Chaos Filter):</strong> Gute Bilder in VGA-Ordner, unruhige in 'Trash'.",
+                sorteer_btn_input: "1. Quellbilder wählen",
                 lbl_geen_bestanden: "Keine Dateien ausgewählt",
-                sorteer_btn_output: "2. 'VGA_Database' Ordner wählen/erstellen",
-                lbl_geen_doelmap: "Kein Zielordner verknüpft",
+                sorteer_btn_output: "2. Datenbank-Ordner wählen",
+                lbl_geen_doelmap: "Kein Zielordner",
                 sorteer_btn_start: "3. Sortierung starten",
                 status_titel: "Status:",
                 schilder_titel: "🖼️ Mosaik-Konfigurator",
                 schilder_btn_doel: "1. Zielfoto wählen",
                 lbl_geen_foto: "Kein Foto ausgewählt",
-                schilder_btn_db: "2. VGA-Datenbank verknüpfen",
-                lbl_geen_db: "Keine Datenbank verknüpft",
-                schilder_lbl_missend: "3. Was tun bei fehlenden Farben?",
-                schilder_opt1: "Option 2: Nächstgelegene Farbe verwenden (Empfohlen)",
-                schilder_opt2: "Option 1: Diagnoseblöcke anzeigen",
-                schilder_lbl_kolommen: "Raster (Anzahl Spalten)",
-                schilder_lbl_grootte: "Kachelgröße (Pixel)",
+                schilder_btn_db: "2. Datenbank verknüpfen",
+                lbl_geen_db: "Keine Datenbank",
+                schilder_lbl_missend: "3. Fehlende Farben?",
+                schilder_opt1: "Option 2: Nächstgelegene Farbe",
+                schilder_opt2: "Option 1: Diagnoseblöcke",
+                schilder_lbl_kolommen: "Raster (Spalten)",
+                schilder_lbl_overlay: "Original Overlay (Blend)",
+                schilder_lbl_grootte: "Kachelgröße",
                 schilder_formaat: "Endformat:",
-                schilder_btn_start: "4. Interaktives Mosaik bauen",
+                schilder_btn_start: "4. Mosaik bauen",
                 export_naam_lbl: "Projektname:",
-                schilder_btn_export: "5a. Interaktives HTML-Projekt exportieren",
-                export_jpg_btn: "5b. Als einzelnes JPG herunterladen (Druckqualität)",
-                status_klaar: "Bereit für Eingabe.",
+                schilder_btn_export: "5a. HTML-Projekt exportieren",
+                export_jpg_btn: "5b. JPG herunterladen",
+                status_klaar: "Bereit.",
                 schilder_paneel_links: "Originalfoto",
                 schilder_paneel_rechts: "VGA-Vorschau",
                 resultaat_titel: "✨ Interaktiver Ausstellungsraum",
-                resultaat_uitleg: "Fahren Sie mit der Maus über das Mosaik, um zu zoomen. Klicken Sie, um das Originalbild zu sehen.",
-                resultaat_leeg: "Noch kein Kunstwerk generiert.",
-                dyn_bezig: "Schwere Berechnung läuft...",
-                dyn_export_bezig: "Kopiere Projektdateien und generiere 64x64 Thumbnails...",
+                resultaat_uitleg: "Maus über Mosaik = Zoom. Klicken = Originalbild.",
+                resultaat_leeg: "Noch kein Kunstwerk.",
+                dyn_bezig: "Berechnung läuft...",
+                dyn_export_bezig: "Generiere Thumbnails...",
                 def_project_naam: "Mein VGA Mosaik",
-                dyn_jpg_bezig: "Generiere hochauflösendes JPG... (Bitte warten)"
+                dyn_jpg_bezig: "Generiere JPG..."
             },
             fr: {
                 tab_start: "🏠 Accueil", tab_sorteerder: "🎨 Fabrique", tab_schilder: "🖼️ Studio Peintre", tab_resultaat: "✨ Résultat",
                 start_titel: "Bienvenue dans le Studio Mosaïque VGA",
-                start_intro: "Ce studio vous aide à transformer n'importe quelle photo en une belle mosaïque interactive, à partir de vos propres images. 3 étapes simples:",
-                start_stap1_titel: "Étape 1: La Fabrique (Créer la base)",
-                start_stap1_text: "Dans la <strong>Fabrique</strong>, importez vos propres photos. L'algorithme analyse la couleur 'Redmean' et les répartit dans 256 dossiers de couleurs.",
-                start_stap2_titel: "Étape 2: Studio (Construire la Mosaïque)",
-                start_stap2_text: "Choisissez votre photo cible et liez la base de données. Utilisez l'aperçu en direct. Cliquez sur construire.",
-                start_stap3_titel: "Étape 3: Le Résultat (Exporter)",
-                start_stap3_text: "Satisfait ? Exportez-le en tant que package HTML interactif ou téléchargez un JPG haute résolution pour l'impression.",
-                start_btn: "Commencer avec la Fabrique",
+                start_intro: "Transformez vos photos en mosaïques.",
+                start_stap1_titel: "Étape 1: La Fabrique",
+                start_stap1_text: "Analyse des couleurs. Les photos rejetées vont dans la corbeille.",
+                start_stap2_titel: "Étape 2: Studio Peintre",
+                start_stap2_text: "Choisissez la photo, liez la base, et construisez.",
+                start_stap3_titel: "Étape 3: Exporter",
+                start_stap3_text: "Exportez en HTML ou en JPG.",
+                start_btn: "Commencer",
                 sorteer_titel: "🎨 Fabrique VGA",
-                sorteer_uitleg: "Sélectionnez vos images sources. Ce script les place dans le dossier de couleur exact.",
-                sorteer_btn_input: "1. Choisir images (Sélection multiple)",
-                lbl_geen_bestanden: "Aucun fichier sélectionné",
-                sorteer_btn_output: "2. Choisir/Créer le dossier 'VGA_Database'",
+                sorteer_uitleg: "<strong>Color Clustering (8x8 & Chaos Filter):</strong> Les bonnes photos dans VGA, les mauvaises dans 'Trash'.",
+                sorteer_btn_input: "1. Choisir images",
+                lbl_geen_bestanden: "Aucun fichier",
+                sorteer_btn_output: "2. Choisir dossier base",
                 lbl_geen_doelmap: "Aucun dossier lié",
                 sorteer_btn_start: "3. Démarrer le tri",
                 status_titel: "Statut:",
-                schilder_titel: "🖼️ Configurateur de Mosaïque",
+                schilder_titel: "🖼️ Configurateur",
                 schilder_btn_doel: "1. Choisir photo cible",
                 lbl_geen_foto: "Aucune photo",
-                schilder_btn_db: "2. Lier la base de données VGA",
-                lbl_geen_db: "Aucune base liée",
-                schilder_lbl_missend: "3. Que faire des couleurs manquantes?",
-                schilder_opt1: "Option 2: Utiliser la couleur dispo la plus proche (Recommandé)",
-                schilder_opt2: "Option 1: Afficher les blocs de diagnostic",
+                schilder_btn_db: "2. Lier la base",
+                lbl_geen_db: "Aucune base",
+                schilder_lbl_missend: "3. Couleurs manquantes?",
+                schilder_opt1: "Option 2: Couleur la plus proche",
+                schilder_opt2: "Option 1: Blocs de diagnostic",
                 schilder_lbl_kolommen: "Grille (Colonnes)",
-                schilder_lbl_grootte: "Taille des tuiles (Pixels)",
+                schilder_lbl_overlay: "Superposition originale",
+                schilder_lbl_grootte: "Taille des tuiles",
                 schilder_formaat: "Taille finale:",
                 schilder_btn_start: "4. Construire la Mosaïque",
                 export_naam_lbl: "Nom du projet:",
-                schilder_btn_export: "5a. Exporter le projet HTML interactif",
-                export_jpg_btn: "5b. Télécharger en un seul JPG (Qualité d'impression)",
+                schilder_btn_export: "5a. Exporter HTML",
+                export_jpg_btn: "5b. Télécharger JPG",
                 status_klaar: "Prêt.",
                 schilder_paneel_links: "Photo originale",
                 schilder_paneel_rechts: "Aperçu VGA",
-                resultaat_titel: "✨ Espace d'exposition interactif",
-                resultaat_uitleg: "Survolez la mosaïque pour zoomer. Cliquez pour voir l'image originale.",
-                resultaat_leeg: "Aucune œuvre générée.",
-                dyn_bezig: "Calcul lourd en cours...",
-                dyn_export_bezig: "Copie des fichiers et création des miniatures 64x64...",
-                def_project_naam: "Ma Mosaïque VGA",
-                dyn_jpg_bezig: "Génération du JPG haute résolution... (Veuillez patienter)"
+                resultaat_titel: "✨ Espace interactif",
+                resultaat_uitleg: "Survolez pour zoomer. Cliquez pour l'original.",
+                resultaat_leeg: "Aucune œuvre.",
+                dyn_bezig: "Calcul en cours...",
+                dyn_export_bezig: "Génération...",
+                def_project_naam: "Ma Mosaïque",
+                dyn_jpg_bezig: "Génération du JPG..."
             }
         };
 
@@ -382,8 +525,29 @@
 
         function getTxt(key) { return vertalingen[currentLang][key] || key; }
 
-        let sorteerFiles = []; let sorteerDirHandle = null;
-        let schilderDoelFile = null; let schilderImgObj = null; let schilderDirHandle = null;
+        let sorteerFiles = [];
+        let schilderDoelFile = null; let schilderImgObj = null;
+
+        let dbHandle = null;
+
+        Object.defineProperty(window, 'sorteerDirHandle',  { get: () => dbHandle, set: v => { dbHandle = v; } });
+        Object.defineProperty(window, 'overzichtDirHandle',{ get: () => dbHandle, set: v => { dbHandle = v; } });
+        Object.defineProperty(window, 'schilderDirHandle', { get: () => dbHandle, set: v => { dbHandle = v; } });
+
+        async function koppelGlobaleDatabase() {
+            try {
+                dbHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                const naam = dbHandle.name;
+                document.getElementById('lblSorteerOutput').innerText = naam;
+                document.getElementById('lblSchilderDB').innerText = naam;
+                document.getElementById('lblOverzichtMap').innerText = naam;
+                document.getElementById('btnStartSorteren').disabled = sorteerFiles.length === 0;
+                await scanDatabaseOverzicht();
+            } catch(e) {}
+        }
+
+        async function kiesOverzichtMap()      { await koppelGlobaleDatabase(); }
+        async function kiesSchilderDatabase()  { await koppelGlobaleDatabase(); }
         let globaleGridState = []; let globaleKolommen = 80; let globaleGrootte = 16;
         let globaleAantalRijen = 0;
 
@@ -415,53 +579,907 @@
             } catch (e) {}
         }
 
-        async function kiesSorteerOutput() {
+
+        // ─── DATABASE OVERZICHT FUNCTIES (AANGEPAST NAAR COMPACT 16x16 RASTER) ───
+
+        async function scanDatabaseOverzicht() {
+            if (!dbHandle) return;
+            document.getElementById('overzichtLaadStatus').style.display = 'block';
+            document.getElementById('dbOverzichtContainer').style.display = 'none';
+
+            document.getElementById('detailJagerSectie').style.display = 'block';
+
+            const telMap = {};
+            let totaal = 0;
             try {
-                sorteerDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-                document.getElementById('lblSorteerOutput').innerText = sorteerDirHandle.name;
-                if (sorteerFiles.length > 0) document.getElementById('btnStartSorteren').disabled = false;
-            } catch (e) {}
+                for await (const [naam, handle] of overzichtDirHandle.entries()) {
+                    if (handle.kind !== 'directory') continue;
+                    if (naam.startsWith('00_Trash')) continue;
+                    let count = 0;
+                    for await (const [bestand, bh] of handle.entries()) {
+                        if (bh.kind === 'file') count++;
+                    }
+                    telMap[naam] = count;
+                    totaal += count;
+                }
+            } catch(e) {}
+
+            document.getElementById('lblOverzichtTotaal').innerText = `Totaal: ${totaal} afbeeldingen in database`;
+            document.getElementById('overzichtLaadStatus').style.display = 'none';
+
+            function getTeller(idx) {
+                const entry = Object.keys(telMap).find(k => {
+                    const m = k.match(/^Index_(\d+)_/);
+                    return m && parseInt(m[1]) === idx;
+                });
+                return entry ? telMap[entry] : 0;
+            }
+
+            function maakCel(idx, r, g, b) {
+                const count = getTeller(idx);
+                const mapNaam = `Index_${idx}_RGB_${r}_${g}_${b}`;
+
+                let balkKleur;
+                if (count === 0)       balkKleur = '#1a1a1a';
+                else if (count <= 2)   balkKleur = '#7a5000';
+                else if (count >= 100) balkKleur = '#7a0000';
+                else                   balkKleur = '#0a4a0a';
+
+                const cel = document.createElement('div');
+                cel.title = `RGB(${r},${g},${b}) · ${count} foto's`;
+                cel.style.cssText = `
+                    display:inline-flex; flex-direction:column; flex-shrink:0;
+                    width:var(--celbreedte,32px); border-radius:2px; overflow:hidden;
+                    border:1px solid rgba(0,0,0,0.3); box-sizing:border-box;
+                    cursor:${count > 0 ? 'pointer' : 'default'};
+                    transition: transform 0.1s, box-shadow 0.1s;
+                `;
+                if (count > 0) {
+                    cel.onmouseenter = () => { cel.style.transform='scale(1.25)'; cel.style.zIndex=10; cel.style.boxShadow='0 0 6px rgba(255,255,255,0.6)'; };
+                    cel.onmouseleave = () => { cel.style.transform=''; cel.style.zIndex=''; cel.style.boxShadow=''; };
+                    cel.onclick = () => openMapInspectie(idx, r, g, b, mapNaam, count);
+                }
+
+                const kleurVlak = document.createElement('div');
+                kleurVlak.style.cssText = `width:100%; height:var(--celhoogte,26px); background-color:rgb(${r},${g},${b});`;
+
+                const balk = document.createElement('div');
+                const balkTekst = count === 0 ? '' : (count >= 100 ? '99+' : String(count));
+                balk.style.cssText = `
+                    width:100%; height:10px; background:${balkKleur};
+                    display:flex; align-items:center; justify-content:center;
+                    font-size:8px; font-weight:bold; font-family:monospace; color:#fff;
+                `;
+                balk.innerText = balkTekst;
+
+                cel.appendChild(kleurVlak);
+                cel.appendChild(balk);
+                return cel;
+            }
+
+            const container = document.getElementById('dbOverzichtContainer');
+            container.innerHTML = ''; 
+
+            container.style.setProperty('--celbreedte', '32px');
+            container.style.setProperty('--celhoogte', '26px');
+
+            const basis = vgaPalet.slice(0, 16);
+            const kubus = vgaPalet.slice(16, 232).map(p => ({ ...p, hsl: rgbNaarHsl(p.r, p.g, p.b) }));
+            const grijs = vgaPalet.slice(232, 256).map(p => ({ ...p, hsl: rgbNaarHsl(p.r, p.g, p.b) }));
+
+            grijs.sort((a, b) => b.hsl.l - a.hsl.l);
+            
+            const linkerKolomGrijs = grijs.slice(0, 15);
+            const resterendGrijs = grijs.slice(15);
+            const restKleuren = [...kubus, ...resterendGrijs];
+
+            restKleuren.sort((a, b) => {
+                const hA = a.index >= 232 ? 0 : a.hsl.h;
+                const hB = b.index >= 232 ? 0 : b.hsl.h;
+                if (Math.abs(hA - hB) > 0.1) {
+                    return hA - hB;
+                }
+                return b.hsl.l - a.hsl.l;
+            });
+
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = 'overflow-x:auto; margin-bottom:20px; text-align:center;';
+
+            const table = document.createElement('table');
+            table.style.cssText = 'border-collapse:separate; border-spacing:2px; margin: 0 auto;';
+
+            const rij0 = table.insertRow();
+            basis.forEach(p => {
+                const td = document.createElement('td');
+                td.style.padding = '0';
+                td.appendChild(maakCel(p.index, p.r, p.g, p.b));
+                rij0.appendChild(td);
+            });
+
+            let restIdx = 0;
+            for (let r = 1; r <= 15; r++) {
+                const rij = table.insertRow();
+
+                const tdGrijs = document.createElement('td');
+                tdGrijs.style.padding = '0';
+                const pGrijs = linkerKolomGrijs[r - 1];
+                tdGrijs.appendChild(maakCel(pGrijs.index, pGrijs.r, pGrijs.g, pGrijs.b));
+                rij.appendChild(tdGrijs);
+
+                for (let c = 1; c <= 15; c++) {
+                    const td = document.createElement('td');
+                    td.style.padding = '0';
+                    if (restIdx < restKleuren.length) {
+                        const p = restKleuren[restIdx++];
+                        td.appendChild(maakCel(p.index, p.r, p.g, p.b));
+                    } else {
+                        const leeg = document.createElement('div');
+                        leeg.style.cssText = 'width:var(--celbreedte); height:var(--celhoogte); background:#111;';
+                        td.appendChild(leeg);
+                    }
+                    rij.appendChild(td);
+                }
+            }
+
+            wrapper.appendChild(table);
+            container.appendChild(wrapper);
+
+            document.getElementById('dbOverzichtContainer').style.display = 'block';
+
+            const heeftOvervol = Object.values(telMap).some(v => v >= 100);
+            document.getElementById('balanceerSectie').style.display = heeftOvervol ? 'block' : 'none';
+            if (!heeftOvervol) document.getElementById('lblBalanceerStatus').innerText = '';
+
+            const heeftSchaars = Object.values(telMap).some(v => v < 10);
+            document.getElementById('kleurmijnSectie').style.display = (heeftOvervol && heeftSchaars) ? 'block' : 'none';
+
+            document.getElementById('lblGlobaleTotaal').innerText = totaal > 0 ? `${totaal} foto's in database` : '';
+        }
+
+        // ─── MAP INSPECTIE ────────────────────────────────────────────────────
+        async function openMapInspectie(idx, r, g, b, mapNaam, count) {
+            if (!dbHandle) return;
+            const paneel = document.getElementById('mapInspectiePaneel');
+            const titel  = document.getElementById('mapInspectieTitel');
+            const inhoud = document.getElementById('mapInspectieInhoud');
+
+            titel.innerHTML = `&#128194; ${mapNaam} &nbsp;<span style="color:#94a3b8; font-weight:normal; font-size:12px;">${count} foto's &nbsp;·&nbsp; RGB(${r},${g},${b})</span>`;
+            inhoud.innerHTML = '<span style="color:#555; font-size:12px;">Laden...</span>';
+            paneel.style.display = 'block';
+            paneel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            try {
+                const mapHandle = await dbHandle.getDirectoryHandle(mapNaam);
+                inhoud.innerHTML = '';
+                const bestanden = [];
+                for await (const [naam, fh] of mapHandle.entries()) {
+                    if (fh.kind === 'file') bestanden.push({ naam, fh });
+                }
+                bestanden.sort((a,b) => a.naam.localeCompare(b.naam));
+
+                if (bestanden.length === 0) {
+                    inhoud.innerHTML = '<span style="color:#555; font-size:12px;">Geen bestanden gevonden.</span>';
+                    return;
+                }
+
+                for (const { naam, fh } of bestanden) {
+                    const file = await fh.getFile();
+                    const url  = URL.createObjectURL(file);
+
+                    const wrapper = document.createElement('div');
+                    wrapper.style.cssText = 'position:relative; width:80px; flex-shrink:0; cursor:pointer;';
+                    wrapper.title = naam;
+
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.cssText = 'width:80px; height:80px; object-fit:cover; border-radius:3px; border:1px solid #2d2d34; display:block;';
+                    img.onload = () => URL.revokeObjectURL(url);
+
+                    const lbl = document.createElement('div');
+                    lbl.style.cssText = 'font-size:9px; color:#555; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80px;';
+                    lbl.innerText = naam;
+
+                    wrapper.onclick = () => {
+                        const groot = URL.createObjectURL(file);
+                        openStudioModal(groot, naam);
+                    };
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(lbl);
+                    inhoud.appendChild(wrapper);
+                }
+            } catch(e) {
+                inhoud.innerHTML = `<span style="color:#e74c3c; font-size:12px;">Map niet gevonden of geen toegang.</span>`;
+            }
+        }
+
+        // ─── STAP 4: KLEURMIJNEN ─────────────────────────────────────────────────
+        async function startKleurmijn() {
+            if (!dbHandle) return;
+            const logEl = document.getElementById('kleurmijnLog');
+            const statusEl = document.getElementById('lblKleurmijnStatus');
+            logEl.innerHTML = '';
+            logEl.style.display = 'block';
+            statusEl.innerText = 'Bezig…';
+
+            const maxKopie   = parseInt(document.getElementById('kleurmijnMaxKopie').value);
+            const doelgrens  = parseInt(document.getElementById('kleurmijnDoelgrens').value);
+
+            const log = (tekst, kleur) => {
+                const span = document.createElement('span');
+                span.style.color = kleur || '#e5e5e5';
+                span.innerText = tekst + '\n';
+                logEl.appendChild(span);
+                logEl.scrollTop = logEl.scrollHeight;
+            };
+
+            const werkCanvas  = document.getElementById('sorteerWerkCanvas');
+            const werkCtx     = werkCanvas.getContext('2d', { willReadFrequently: true });
+            const scanCanvas  = document.getElementById('balanceerScanCanvas');
+            const scanCtx     = scanCanvas.getContext('2d', { willReadFrequently: true });
+            const SCAN_DIM    = 16;
+
+            const mapHandles = {};
+            const telMap = {};
+            for await (const [naam, handle] of dbHandle.entries()) {
+                if (handle.kind !== 'directory' || naam.startsWith('00_Trash')) continue;
+                let count = 0;
+                for await (const [, bh] of handle.entries()) { if (bh.kind === 'file') count++; }
+                mapHandles[naam] = handle;
+                telMap[naam] = count;
+            }
+
+            const verplaatsTeller = {};
+            const overvolMappen = Object.keys(telMap).filter(n => telMap[n] >= 100);
+            const schraalMappen = Object.keys(telMap).filter(n => telMap[n] < doelgrens);
+
+            log(`▶ ${overvolMappen.length} volle mappen als mijn | ${schraalMappen.length} schaarse kleuren als doel`, '#f1c40f');
+
+            if (overvolMappen.length === 0 || schraalMappen.length === 0) {
+                statusEl.innerText = 'Niets te doen — geen volle én schaarse mappen tegelijk.';
+                return;
+            }
+
+            function getIdx(mapNaam) {
+                const m = mapNaam.match(/^Index_(\d+)_/);
+                return m ? parseInt(m[1]) : -1;
+            }
+            const schraalIndices = new Set(schraalMappen.map(getIdx).filter(i => i >= 0));
+
+            const S_DREMPEL   = parseInt(document.getElementById('sliderSaturatie').value) / 100;
+            const L_MIN       = 0.04;
+            const L_MAX       = 0.96;
+            const HUE_TOL     = parseInt(document.getElementById('sliderHueTol').value);
+            const SEC_HUE_TOL = Math.max(20, HUE_TOL - 10);
+            const MIN_TOONSTERKTE = parseInt(document.getElementById('sliderToonsterkte').value) / 100;
+
+            log(`⚙️  Instellingen: saturatie >${S_DREMPEL.toFixed(2)} | hue-tolerantie ±${HUE_TOL}° | min. toonsterkte ${Math.round(MIN_TOONSTERKTE*100)}%`, '#64748b');
+
+            function vindTonen(hslPixels, uitsluitHue, uitsluitTol) {
+                const kleurrijk = hslPixels.filter(px =>
+                    px.hsl.s > S_DREMPEL && px.hsl.l > L_MIN && px.hsl.l < L_MAX &&
+                    (uitsluitHue === null || hoekenAfstand(px.hsl.h, uitsluitHue) > uitsluitTol)
+                );
+                if (kleurrijk.length < 4) return [];
+
+                const hist = new Array(36).fill(0);
+                for (const px of kleurrijk) {
+                    const bin = Math.floor(px.hsl.h / 10) % 36;
+                    hist[bin] += px.hsl.s * px.hsl.s;
+                    hist[(bin+1)%36] += px.hsl.s * px.hsl.s * 0.4;
+                    hist[(bin+35)%36] += px.hsl.s * px.hsl.s * 0.4;
+                }
+                const histSom = hist.reduce((a,b) => a+b, 0);
+                if (histSom === 0) return [];
+
+                const tonen = [];
+                const gebruiktBins = new Set();
+                for (let poging = 0; poging < 36 && tonen.length < 3; poging++) {
+                    let maxBin = -1, maxVal = 0;
+                    for (let b = 0; b < 36; b++) {
+                        if (!gebruiktBins.has(b) && hist[b] > maxVal) { maxVal = hist[b]; maxBin = b; }
+                    }
+                    if (maxBin === -1 || maxVal / histSom < MIN_TOONSTERKTE) break;
+                    const hue = maxBin * 10 + 5;
+                    for (let d = -4; d <= 4; d++) gebruiktBins.add((maxBin + d + 36) % 36);
+                    const toonPixels = kleurrijk.filter(px => hoekenAfstand(px.hsl.h, hue) <= SEC_HUE_TOL);
+                    if (toonPixels.length >= 3) {
+                        tonen.push({ hue, pixels: toonPixels, sterkte: maxVal / histSom });
+                    }
+                }
+                return tonen;
+            }
+
+            let gevonden = 0, geanalyseerd = 0;
+
+            for (const mapNaam of overvolMappen) {
+                const nogSchraal = vgaPalet.filter(p => {
+                    const idx = p.index;
+                    if (!schraalIndices.has(idx)) return false;
+                    const naam2 = `Index_${p.index}_RGB_${p.r}_${p.g}_${p.b}`;
+                    return (telMap[naam2] || 0) < doelgrens && (verplaatsTeller[idx] || 0) < maxKopie;
+                });
+                if (nogSchraal.length === 0) {
+                    log('\n🎉 Alle schaarse kleuren zijn gevuld!', '#7fff7f');
+                    break;
+                }
+
+                const bronHandle = mapHandles[mapNaam];
+                const bestanden = [];
+                for await (const [naam2, fh] of bronHandle.entries()) {
+                    if (fh.kind === 'file') bestanden.push({ naam: naam2, handle: fh });
+                }
+                log(`\n⛏️  ${mapNaam} (${bestanden.length} foto's doorzoeken)`, '#94a3b8');
+
+                for (const { naam: bestandNaam, handle } of bestanden) {
+                    geanalyseerd++;
+                    statusEl.innerText = `Geanalyseerd: ${geanalyseerd} | Verplaatst: ${gevonden}`;
+
+                    try {
+                        const file = await handle.getFile();
+                        const imgBitmap = await createImageBitmap(file);
+                        const size = Math.min(imgBitmap.width, imgBitmap.height);
+                        const sx = (imgBitmap.width - size) / 2;
+                        const sy = (imgBitmap.height - size) / 2;
+
+                        werkCtx.clearRect(0, 0, 512, 512);
+                        werkCtx.drawImage(imgBitmap, sx, sy, size, size, 0, 0, 512, 512);
+                        scanCtx.clearRect(0, 0, SCAN_DIM, SCAN_DIM);
+                        scanCtx.drawImage(werkCanvas, 0, 0, 512, 512, 0, 0, SCAN_DIM, SCAN_DIM);
+
+                        const pd = scanCtx.getImageData(0, 0, SCAN_DIM, SCAN_DIM).data;
+                        const pixels = [];
+                        for (let p = 0; p < pd.length; p += 4) {
+                            pixels.push({ r: pd[p], g: pd[p+1], b: pd[p+2] });
+                        }
+                        const hslPixels = pixels.map(px => ({ ...px, hsl: rgbNaarHsl(px.r, px.g, px.b) }));
+
+                        const primaireTonen = vindTonen(hslPixels, null, 0);
+                        if (primaireTonen.length === 0) continue;
+                        const primairHue = primaireTonen[0].hue;
+
+                        const extraTonen = vindTonen(hslPixels, primairHue, HUE_TOL);
+
+                        for (const toon of extraTonen) {
+                            const toonGem = berekenGewogenGemiddelde(toon.pixels);
+                            let besteIdx = 0, minDist = Infinity;
+                            for (let j = 0; j < vgaPalet.length; j++) {
+                                const dist = rgbAfstandRedmean(toonGem.r, toonGem.g, toonGem.b, vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
+                                if (dist < minDist) { minDist = dist; besteIdx = j; }
+                            }
+                            const doelPalet = vgaPalet[besteIdx];
+
+                            if (!schraalIndices.has(doelPalet.index)) continue;
+                            if ((verplaatsTeller[doelPalet.index] || 0) >= maxKopie) continue;
+                            const doelNaam2 = `Index_${doelPalet.index}_RGB_${doelPalet.r}_${doelPalet.g}_${doelPalet.b}`;
+                            if ((telMap[doelNaam2] || 0) >= doelgrens) continue;
+
+                            let doelHandle = mapHandles[doelNaam2];
+                            if (!doelHandle) {
+                                doelHandle = await dbHandle.getDirectoryHandle(doelNaam2, { create: true });
+                                mapHandles[doelNaam2] = doelHandle;
+                                telMap[doelNaam2] = 0;
+                            }
+
+                            const blob = await new Promise(res => werkCanvas.toBlob(res, 'image/jpeg', 0.92));
+                            const nieuwNaam = `MIJN_${doelPalet.index}_${Date.now()}.jpg`;
+                            const fh = await doelHandle.getFileHandle(nieuwNaam, { create: true });
+                            const wr = await fh.createWritable();
+                            await wr.write(blob); await wr.close();
+
+                            await bronHandle.removeEntry(bestandNaam);
+
+                            verplaatsTeller[doelPalet.index] = (verplaatsTeller[doelPalet.index] || 0) + 1;
+                            telMap[doelNaam2] = (telMap[doelNaam2] || 0) + 1;
+                            telMap[mapNaam] = (telMap[mapNaam] || 1) - 1;
+                            gevonden++;
+
+                            const sterktePct = Math.round(toon.sterkte * 100);
+                            log(`  ↪ ${bestandNaam} → ${doelNaam2} (toon ${Math.round(toon.hue)}° | ${sterktePct}% sterk)`, '#7fff7f');
+                            break;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            statusEl.innerText = `✅ Klaar — ${gevonden} foto's verplaatst uit ${geanalyseerd} geanalyseerd`;
+            log(`\n✅ Gereed: ${gevonden} foto's verplaatst.`, '#f1c40f');
+            await scanDatabaseOverzicht();
+        }
+
+        // ─── SLIMME BALANCERING ───────────────────────────────────────────────
+        async function startBalancering() {
+            if (!dbHandle) return;
+            const logEl = document.getElementById('balanceerLog');
+            const statusEl = document.getElementById('lblBalanceerStatus');
+            logEl.innerHTML = '';
+            logEl.style.display = 'block';
+            statusEl.innerText = 'Bezig…';
+
+            const log = (tekst, kleur) => {
+                const span = document.createElement('span');
+                span.style.color = kleur || '#e5e5e5';
+                span.innerText = tekst + '\n';
+                logEl.appendChild(span);
+                logEl.scrollTop = logEl.scrollHeight;
+            };
+
+            const werkCanvas = document.getElementById('sorteerWerkCanvas');
+            const werkCtx = werkCanvas.getContext('2d', { willReadFrequently: true });
+            const scanCanvas = document.getElementById('balanceerScanCanvas');
+            const scanCtx = scanCanvas.getContext('2d', { willReadFrequently: true });
+            const SCAN_DIM = 16;
+
+            const mapHandles = {};
+            const telMap = {};
+
+            for await (const [naam, handle] of overzichtDirHandle.entries()) {
+                if (handle.kind !== 'directory') continue;
+                if (naam.startsWith('00_Trash')) continue;
+                let count = 0;
+                for await (const [, bh] of handle.entries()) { if (bh.kind === 'file') count++; }
+                mapHandles[naam] = handle;
+                telMap[naam] = count;
+            }
+
+            async function zoekDoelMap(r, g, b, uitsluitMapNaam) {
+                let besteIdx = -1, minDist = Infinity;
+                for (let j = 0; j < vgaPalet.length; j++) {
+                    const p = vgaPalet[j];
+                    const dist = rgbAfstandRedmean(r, g, b, p.r, p.g, p.b);
+                    if (dist < minDist) { minDist = dist; besteIdx = j; }
+                }
+                const doelPalet = vgaPalet[besteIdx];
+                const verwachteNaam = `Index_${doelPalet.index}_RGB_${doelPalet.r}_${doelPalet.g}_${doelPalet.b}`;
+
+                if (verwachteNaam === uitsluitMapNaam) return null;
+                const doelCount = telMap[verwachteNaam] || 0;
+                if (doelCount >= 99) return null;
+
+                let doelHandle = mapHandles[verwachteNaam];
+                let isNieuw = false;
+                if (!doelHandle) {
+                    doelHandle = await overzichtDirHandle.getDirectoryHandle(verwachteNaam, { create: true });
+                    mapHandles[verwachteNaam] = doelHandle;
+                    telMap[verwachteNaam] = 0;
+                    isNieuw = true;
+                }
+                return { naam: verwachteNaam, handle: doelHandle, isNieuw };
+            }
+
+            const overvolMappen = Object.keys(telMap).filter(n => telMap[n] >= 100);
+            log(`▶ ${overvolMappen.length} overvol map(pen) gevonden.`, '#f1c40f');
+
+            let verplaatst = 0, geanalyseerd = 0;
+
+            for (const mapNaam of overvolMappen) {
+                const bronHandle = mapHandles[mapNaam];
+                const bestanden = [];
+                for await (const [bestandNaam, fh] of bronHandle.entries()) {
+                    if (fh.kind === 'file') bestanden.push({ naam: bestandNaam, handle: fh });
+                }
+
+                log(`\n📂 ${mapNaam} (${bestanden.length} foto's)`, '#94a3b8');
+
+                for (const { naam, handle } of bestanden) {
+                    if ((telMap[mapNaam] || 0) < 100) {
+                        log(`  ✅ Map heeft nu minder dan 100 foto's, stop met uitdunnen.`, '#7fff7f');
+                        break;
+                    }
+
+                    geanalyseerd++;
+                    statusEl.innerText = `Geanalyseerd: ${geanalyseerd} | Verplaatst: ${verplaatst}`;
+
+                    try {
+                        const file = await handle.getFile();
+                        const imgBitmap = await createImageBitmap(file);
+                        const size = Math.min(imgBitmap.width, imgBitmap.height);
+                        const sx = (imgBitmap.width - size) / 2;
+                        const sy = (imgBitmap.height - size) / 2;
+
+                        werkCtx.clearRect(0, 0, 512, 512);
+                        werkCtx.drawImage(imgBitmap, sx, sy, size, size, 0, 0, 512, 512);
+
+                        scanCtx.clearRect(0, 0, SCAN_DIM, SCAN_DIM);
+                        scanCtx.drawImage(werkCanvas, 0, 0, 512, 512, 0, 0, SCAN_DIM, SCAN_DIM);
+                        const pd = scanCtx.getImageData(0, 0, SCAN_DIM, SCAN_DIM).data;
+                        const pixels = [];
+                        for (let p = 0; p < pd.length; p += 4) {
+                            pixels.push({ r: pd[p], g: pd[p+1], b: pd[p+2], rand: false });
+                        }
+
+                        const randPixels = [];
+                        for (let py = 0; py < SCAN_DIM; py++) {
+                            for (let px2 = 0; px2 < SCAN_DIM; px2++) {
+                                const isRand = px2 <= 2 || px2 >= SCAN_DIM - 3 || py <= 2 || py >= SCAN_DIM - 3;
+                                if (isRand) {
+                                    const idx2 = (py * SCAN_DIM + px2) * 4;
+                                    randPixels.push({ r: pd[idx2], g: pd[idx2+1], b: pd[idx2+2] });
+                                }
+                            }
+                        }
+
+                        const randCanvas = document.createElement('canvas');
+                        randCanvas.width = SCAN_DIM; randCanvas.height = SCAN_DIM;
+                        const randCtx = randCanvas.getContext('2d', { willReadFrequently: true });
+
+                        const RAND_BREEDTE = Math.floor(512 * 0.30);
+                        randCtx.drawImage(werkCanvas, 0, 0, 512, RAND_BREEDTE, 0, 0, SCAN_DIM, Math.floor(SCAN_DIM/4));
+                        randCtx.drawImage(werkCanvas, 0, 512 - RAND_BREEDTE, 512, RAND_BREEDTE, 0, Math.floor(SCAN_DIM*3/4), SCAN_DIM, Math.floor(SCAN_DIM/4));
+                        randCtx.drawImage(werkCanvas, 0, 0, RAND_BREEDTE, 512, 0, Math.floor(SCAN_DIM/4), Math.floor(SCAN_DIM/4), Math.floor(SCAN_DIM/2));
+                        randCtx.drawImage(werkCanvas, 512 - RAND_BREEDTE, 0, RAND_BREEDTE, 512, Math.floor(SCAN_DIM*3/4), Math.floor(SCAN_DIM/4), Math.floor(SCAN_DIM/4), Math.floor(SCAN_DIM/2));
+
+                        const pdRand = randCtx.getImageData(0, 0, SCAN_DIM, SCAN_DIM).data;
+                        const randUitgesneden = [];
+                        for (let p = 0; p < pdRand.length; p += 4) {
+                            if (pdRand[p+3] > 0) randUitgesneden.push({ r: pdRand[p], g: pdRand[p+1], b: pdRand[p+2] });
+                        }
+
+                        const alleRandPixels = [...randPixels, ...randUitgesneden];
+
+                        const hslPixels = pixels.map(px => ({ ...px, hsl: rgbNaarHsl(px.r, px.g, px.b) }));
+                        const kleurrijk = hslPixels.filter(px => px.hsl.s > 0.12 && px.hsl.l > 0.06 && px.hsl.l < 0.94);
+
+                        if (kleurrijk.length < 8) continue;
+
+                        const hist = new Array(36).fill(0);
+                        for (const px of kleurrijk) {
+                            const bin = Math.floor(px.hsl.h / 10) % 36;
+                            hist[bin] += px.hsl.s;
+                            hist[(bin + 1) % 36] += px.hsl.s * 0.5;
+                            hist[(bin + 35) % 36] += px.hsl.s * 0.5;
+                        }
+                        const primairBin = hist.indexOf(Math.max(...hist));
+                        const primairHue = primairBin * 10 + 5;
+
+                        const hslRand = alleRandPixels.map(px => ({ ...px, hsl: rgbNaarHsl(px.r, px.g, px.b) }));
+                        const kleurrijkRand = hslRand.filter(px =>
+                            px.hsl.s > 0.10 && px.hsl.l > 0.05 && px.hsl.l < 0.95 &&
+                            hoekenAfstand(px.hsl.h, primairHue) > 45
+                        );
+
+                        let secBronPixels = kleurrijkRand;
+                        let gebruiktRand = true;
+                        if (kleurrijkRand.length < 8) {
+                            secBronPixels = kleurrijk.filter(px =>
+                                hoekenAfstand(px.hsl.h, primairHue) > 55 && px.hsl.s > 0.15
+                            );
+                            gebruiktRand = false;
+                        }
+
+                        if (secBronPixels.length < 6) continue;
+
+                        const hist2 = new Array(36).fill(0);
+                        for (const px of secBronPixels) {
+                            const bin = Math.floor(px.hsl.h / 10) % 36;
+                            hist2[bin] += px.hsl.s;
+                            hist2[(bin + 1) % 36] += px.hsl.s * 0.5;
+                            hist2[(bin + 35) % 36] += px.hsl.s * 0.5;
+                        }
+                        const secBin = hist2.indexOf(Math.max(...hist2));
+
+                        const hist2Som = hist2.reduce((a, b) => a + b, 0);
+                        if (hist2[secBin] / hist2Som < 0.12) continue;
+
+                        const secGem = berekenGewogenGemiddelde(secBronPixels);
+
+                        const doelInfo = await zoekDoelMap(secGem.r, secGem.g, secGem.b, mapNaam);
+                        if (!doelInfo) continue;
+                        const { naam: doelNaam, handle: doelHandle, isNieuw } = doelInfo;
+
+                        const nieuweNaam = `2e_${naam}`;
+
+                        const blob = await new Promise(res => werkCanvas.toBlob(res, 'image/jpeg', 0.9));
+                        const nieuwFileHandle = await doelHandle.getFileHandle(nieuweNaam, { create: true });
+                        const writable = await nieuwFileHandle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+
+                        await bronHandle.removeEntry(naam);
+
+                        telMap[mapNaam] = (telMap[mapNaam] || 1) - 1;
+                        telMap[doelNaam] = (telMap[doelNaam] || 0) + 1;
+                        verplaatst++;
+
+                        log(`  ↪ ${naam} → ${doelNaam} ${gebruiktRand ? '(rand)' : '(volledig)'}${isNieuw ? ' 📁 nieuwe map aangemaakt' : ''}`, '#7fff7f');
+
+                    } catch (err) {}
+                }
+            }
+
+            statusEl.innerText = `✅ Klaar — ${verplaatst} foto's verplaatst van ${geanalyseerd} geanalyseerd`;
+            log(`\n✅ Gereed: ${verplaatst} verplaatst van ${geanalyseerd} foto's bekeken.`, '#f1c40f');
+
+            await scanDatabaseOverzicht();
+        }
+
+        // ─── DE 2E RONDE: GERICHTE DETAIL-JAGER (ANTI-SLEUTELHANGER) ───────────────
+        async function startGerichteDetailJager() {
+            if (!dbHandle) {
+                alert("Koppel eerst de Database Map via het Database Overzicht!");
+                return;
+            }
+
+            const mapHandles = {};
+            const ontbrekendeKleuren = [];
+            const kleurTellers = {};
+
+            for (let j = 0; j < vgaPalet.length; j++) {
+                const p = vgaPalet[j];
+                const verwachteNaam = `Index_${p.index}_RGB_${p.r}_${p.g}_${p.b}`;
+                let count = 0;
+                let handle = null;
+                try {
+                    handle = await overzichtDirHandle.getDirectoryHandle(verwachteNaam);
+                    for await (const [, bh] of handle.entries()) { if (bh.kind === 'file') count++; }
+                    mapHandles[verwachteNaam] = handle;
+                } catch(e) {}
+
+                kleurTellers[p.index] = count;
+                if (count < 10) {
+                    ontbrekendeKleuren.push(p);
+                }
+            }
+
+            if (ontbrekendeKleuren.length === 0) {
+                alert("Alle kleuren hebben al 10 of meer foto's. Je database is perfect!");
+                return;
+            }
+
+            let nieuweFiles = [];
+            try {
+                const bestanden = await window.showOpenFilePicker({ multiple: true, types: [{ accept: {'image/*': []} }] });
+                nieuweFiles = await Promise.all(bestanden.map(h => h.getFile()));
+            } catch (e) { return; }
+
+            const logEl = document.getElementById('detailLog');
+            const statusEl = document.getElementById('lblDetailStatus');
+            logEl.style.display = 'block';
+            logEl.innerHTML = '';
+            const log = (tekst, kleur) => {
+                const span = document.createElement('span');
+                span.style.color = kleur || '#e5e5e5';
+                span.innerText = tekst + '\n';
+                logEl.appendChild(span);
+                logEl.scrollTop = logEl.scrollHeight;
+            };
+
+            log(`🔍 Doel: ${ontbrekendeKleuren.length} kleuren aanvullen tot 10 foto's.`, '#3498db');
+            statusEl.innerText = `Scannen van ${nieuweFiles.length} nieuwe foto's...`;
+
+            const werkCanvas = document.getElementById('sorteerWerkCanvas');
+            const werkCtx = werkCanvas.getContext('2d', { willReadFrequently: true });
+            
+            const detailCanvas = document.createElement('canvas');
+            detailCanvas.width = 64; detailCanvas.height = 64;
+            const detailCtx = detailCanvas.getContext('2d', { willReadFrequently: true });
+
+            let cropsGemaakt = 0;
+
+            for (let i = 0; i < nieuweFiles.length; i++) {
+                const actieveOntbrekende = ontbrekendeKleuren.filter(k => kleurTellers[k.index] < 10);
+                if (actieveOntbrekende.length === 0) {
+                    log(`🎉 Alle gaten in de database zijn gevuld! Scan vroegtijdig gestopt.`, '#2ecc71');
+                    break;
+                }
+
+                if (i % 10 === 0) statusEl.innerText = `Gescand: ${i}/${nieuweFiles.length} | Uitsnedes: ${cropsGemaakt} | Gaten over: ${actieveOntbrekende.length}`;
+
+                try {
+                    const file = nieuweFiles[i];
+                    const imgBitmap = await createImageBitmap(file);
+                    detailCtx.drawImage(imgBitmap, 0, 0, 64, 64);
+                    const pData = detailCtx.getImageData(0, 0, 64, 64).data;
+
+                    for (const doelKleur of actieveOntbrekende) {
+                        let matchPixels = 0;
+                        let minX = 64, minY = 64, maxX = 0, maxY = 0;
+
+                        for (let y = 0; y < 64; y++) {
+                            for (let x = 0; x < 64; x++) {
+                                const idx = (y * 64 + x) * 4;
+                                const dist = rgbAfstandRedmean(pData[idx], pData[idx+1], pData[idx+2], doelKleur.r, doelKleur.g, doelKleur.b);
+                                
+                                if (dist < 80) {
+                                    matchPixels++;
+                                    if (x < minX) minX = x;
+                                    if (x > maxX) maxX = x;
+                                    if (y < minY) minY = y;
+                                    if (y > maxY) maxY = y;
+                                }
+                            }
+                        }
+
+                        if (matchPixels > 30) {
+                            const schaalX = imgBitmap.width / 64;
+                            const schaalY = imgBitmap.height / 64;
+                            const realMinX = minX * schaalX;
+                            const realMaxX = maxX * schaalX;
+                            const realMinY = minY * schaalY;
+                            const realMaxY = maxY * schaalY;
+
+                            const breedte = realMaxX - realMinX;
+                            const hoogte = realMaxY - realMinY;
+                            
+                            if (Math.max(breedte, hoogte) >= 512) {
+                                const cropSize = Math.max(breedte, hoogte) * 1.5;
+                                const centerX = realMinX + breedte / 2;
+                                const centerY = realMinY + hoogte / 2;
+                                
+                                const startX = Math.max(0, centerX - cropSize / 2);
+                                const startY = Math.max(0, centerY - cropSize / 2);
+                                const finalSize = Math.min(cropSize, imgBitmap.width - startX, imgBitmap.height - startY);
+
+                                werkCtx.clearRect(0, 0, 512, 512);
+                                werkCtx.drawImage(imgBitmap, startX, startY, finalSize, finalSize, 0, 0, 512, 512);
+
+                                const verwachteNaam = `Index_${doelKleur.index}_RGB_${doelKleur.r}_${doelKleur.g}_${doelKleur.b}`;
+                                let doelHandle = mapHandles[verwachteNaam];
+                                if (!doelHandle) {
+                                    doelHandle = await overzichtDirHandle.getDirectoryHandle(verwachteNaam, { create: true });
+                                    mapHandles[verwachteNaam] = doelHandle;
+                                }
+
+                                const blob = await new Promise(res => werkCanvas.toBlob(res, 'image/jpeg', 0.9));
+                                const cropNaam = `CROP_${doelKleur.index}_${Date.now()}.jpg`;
+                                const nieuwFileHandle = await doelHandle.getFileHandle(cropNaam, { create: true });
+                                const writable = await nieuwFileHandle.createWritable();
+                                await writable.write(blob);
+                                await writable.close();
+
+                                kleurTellers[doelKleur.index]++;
+                                cropsGemaakt++;
+                                log(`  ✂️ Scherp detail (${Math.round(finalSize)}px) gemaakt uit ${file.name} voor RGB(${doelKleur.r},${doelKleur.g},${doelKleur.b}) -> Nu ${kleurTellers[doelKleur.index]}/10 foto's`, '#8e44ad');
+                                break; 
+                            }
+                        }
+                    }
+                } catch(e) {}
+            }
+            
+            statusEl.innerText = `✅ 2e Ronde klaar! ${cropsGemaakt} gerichte uitsnedes toegevoegd.`;
+            await scanDatabaseOverzicht();
+        }
+
+        // --- HULPFUNCTIES VOOR HSL-GEBASEERDE PERCEPTUELE SORTERING ---
+
+        function rgbNaarHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; }
+            else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return { h: h * 360, s, l };
+        }
+
+        function hoekenAfstand(h1, h2) {
+            let diff = Math.abs(h1 - h2) % 360;
+            return diff > 180 ? 360 - diff : diff;
+        }
+
+        function berekenGewogenGemiddelde(pixels) {
+            let somR = 0, somG = 0, somB = 0, somGewicht = 0;
+            for (const px of pixels) {
+                const hsl = rgbNaarHsl(px.r, px.g, px.b);
+                const gewicht = Math.max(0.05, hsl.s * hsl.s);
+                somR += px.r * gewicht;
+                somG += px.g * gewicht;
+                somB += px.b * gewicht;
+                somGewicht += gewicht;
+            }
+            return { r: somR / somGewicht, g: somG / somGewicht, b: somB / somGewicht };
         }
 
         async function startSorteerProces() {
             document.getElementById('btnStartSorteren').disabled = true;
             document.getElementById('sorteerStatusBox').style.display = 'block';
-            const canvas = document.getElementById('sorteerWerkCanvas'); const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            const scanCanvas = document.getElementById('sorteerScanCanvas'); const scanCtx = scanCanvas.getContext('2d', { willReadFrequently: true });
-            let succesTeller = 0;
+            const canvas = document.getElementById('sorteerWerkCanvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const scanCanvas = document.getElementById('sorteerScanCanvas');
+            const scanCtx = scanCanvas.getContext('2d', { willReadFrequently: true });
+
+            let succesTeller = 0, afgewezenTeller = 0;
+            const trashMapHandle = await sorteerDirHandle.getDirectoryHandle('00_Trash_Afgewezen', { create: true });
+
             for (let i = 0; i < sorteerFiles.length; i++) {
                 const file = sorteerFiles[i];
-                document.getElementById('sorteerStatusTekst').innerText = `${i + 1} / ${sorteerFiles.length} (${file.name})`;
+                document.getElementById('sorteerStatusTekst').innerText =
+                    `Analyseren: ${i + 1} / ${sorteerFiles.length} — ✅ ${succesTeller} | 🗑️ ${afgewezenTeller} — (${file.name})`;
+
                 try {
                     const imgBitmap = await createImageBitmap(file);
                     const size = Math.min(imgBitmap.width, imgBitmap.height);
-                    const startX = (imgBitmap.width - size) / 2; const startY = (imgBitmap.height - size) / 2;
-                    ctx.clearRect(0, 0, 512, 512); ctx.drawImage(imgBitmap, startX, startY, size, size, 0, 0, 512, 512);
-                    scanCtx.clearRect(0, 0, 16, 16); scanCtx.drawImage(canvas, 0, 0, 512, 512, 0, 0, 16, 16);
-                    const pixelData = scanCtx.getImageData(0, 0, 16, 16).data;
-                    const stemBus = new Array(256).fill(0);
+                    const startX = (imgBitmap.width - size) / 2;
+                    const startY = (imgBitmap.height - size) / 2;
+
+                    ctx.clearRect(0, 0, 512, 512);
+                    ctx.drawImage(imgBitmap, startX, startY, size, size, 0, 0, 512, 512);
+
+                    scanCtx.clearRect(0, 0, 8, 8);
+                    scanCtx.drawImage(canvas, 0, 0, 512, 512, 0, 0, 8, 8);
+                    const pixelData = scanCtx.getImageData(0, 0, 8, 8).data;
+
+                    const pixels = [];
                     for (let p = 0; p < pixelData.length; p += 4) {
-                        let besteVgaIdx = 0, minAfstand = Infinity;
-                        for (let j = 0; j < vgaPalet.length; j++) {
-                            let dist = rgbAfstandRedmean(pixelData[p], pixelData[p+1], pixelData[p+2], vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
-                            if (dist < minAfstand) { minAfstand = dist; besteVgaIdx = j; }
+                        pixels.push({ r: pixelData[p], g: pixelData[p+1], b: pixelData[p+2] });
+                    }
+
+                    const hslPixels = pixels.map(px => ({ ...px, hsl: rgbNaarHsl(px.r, px.g, px.b) }));
+                    const kleurrijkePixels = hslPixels.filter(px => px.hsl.s > 0.12 && px.hsl.l > 0.06 && px.hsl.l < 0.94);
+
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+
+                    let dominanteHue = null;
+                    let dominanteToonPixels = [];
+
+                    if (kleurrijkePixels.length >= 6) {
+                        const histogram = new Array(36).fill(0);
+                        for (const px of kleurrijkePixels) {
+                            const bin = Math.floor(px.hsl.h / 10) % 36;
+                            histogram[bin] += px.hsl.s; 
+                            histogram[(bin + 1) % 36] += px.hsl.s * 0.5;
+                            histogram[(bin + 35) % 36] += px.hsl.s * 0.5;
                         }
-                        stemBus[besteVgaIdx]++;
+                        const maxBin = histogram.indexOf(Math.max(...histogram));
+                        dominanteHue = maxBin * 10 + 5; 
+
+                        dominanteToonPixels = kleurrijkePixels.filter(px =>
+                            hoekenAfstand(px.hsl.h, dominanteHue) <= 55
+                        );
                     }
-                    let winnendeIndex = 0, meesteStemmen = 0;
-                    for (let v = 0; v < stemBus.length; v++) {
-                        if (stemBus[v] > meesteStemmen) { meesteStemmen = stemBus[v]; winnendeIndex = v; }
+
+                    let vertegenwoordigendeKleur;
+                    let isNeutraalBeld = false;
+
+                    if (dominanteToonPixels.length >= 5) {
+                        vertegenwoordigendeKleur = berekenGewogenGemiddelde(dominanteToonPixels);
+                    } else if (kleurrijkePixels.length >= 3) {
+                        vertegenwoordigendeKleur = berekenGewogenGemiddelde(kleurrijkePixels);
+                    } else {
+                        isNeutraalBeld = true;
+                        let somR = 0, somG = 0, somB = 0;
+                        for (const px of pixels) { somR += px.r; somG += px.g; somB += px.b; }
+                        vertegenwoordigendeKleur = { r: somR/64, g: somG/64, b: somB/64 };
                     }
+
+                    if (!isNeutraalBeld && dominanteHue !== null && kleurrijkePixels.length >= 8) {
+                        const botsendePxs = kleurrijkePixels.filter(px =>
+                            hoekenAfstand(px.hsl.h, dominanteHue) > 90 && px.hsl.s > 0.25
+                        );
+                        if (botsendePxs.length / kleurrijkePixels.length > 0.35) {
+                            const trashFileHandle = await trashMapHandle.getFileHandle(`CHAOS_${Date.now()}_${file.name}`, { create: true });
+                            const trashWritable = await trashFileHandle.createWritable();
+                            await trashWritable.write(blob); await trashWritable.close();
+                            afgewezenTeller++; continue;
+                        }
+                    }
+
+                    const { r: gemR, g: gemG, b: gemB } = vertegenwoordigendeKleur;
+                    let winnendeIndex = 0, minAfstand = Infinity;
+                    for (let j = 0; j < vgaPalet.length; j++) {
+                        let dist = rgbAfstandRedmean(gemR, gemG, gemB, vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
+                        if (dist < minAfstand) { minAfstand = dist; winnendeIndex = j; }
+                    }
+
                     const b = vgaPalet[winnendeIndex];
                     const kleurMapHandle = await sorteerDirHandle.getDirectoryHandle(`Index_${b.index}_RGB_${b.r}_${b.g}_${b.b}`, { create: true });
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
                     const fileHandle = await kleurMapHandle.getFileHandle(`${file.name.split('.')[0]}_${Date.now()}.jpg`, { create: true });
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob); await writable.close();
                     succesTeller++;
-                } catch (error) {}
+
+                } catch (error) {  }
             }
-            document.getElementById('sorteerStatusTekst').innerText = `100% (${succesTeller})`;
+
+            document.getElementById('sorteerStatusTekst').innerText =
+                `✅ Klaar! Geaccepteerd: ${succesTeller} | Naar Trash: ${afgewezenTeller} van ${sorteerFiles.length} totaal`;
             document.getElementById('btnStartSorteren').disabled = false;
         }
 
@@ -525,7 +1543,7 @@
             globaleGrootte = parseInt(document.getElementById('optieGrootte').value);
             btnStart.disabled = true; document.getElementById('exportSectie').style.display = 'none';
             statusLabel.innerText = getTxt('dyn_bezig');
-            globaleGridState = []; 
+            globaleGridState = [];
 
             const alleBeschikbare = [];
             for await (const [naam, handle] of schilderDirHandle.entries()) {
@@ -536,9 +1554,21 @@
                         for await (const [bestandsNaam, bestandHandle] of handle.entries()) {
                             if (bestandHandle.kind === 'file') bestandenLijst.push({ handle: bestandHandle, bestandsNaam: bestandsNaam });
                         }
-                        if (bestandenLijst.length > 0) {
-                            alleBeschikbare.push({ index: parseInt(delen[1]), r: parseInt(delen[3]), g: parseInt(delen[4]), b: parseInt(delen[5]), bestanden: bestandenLijst, currentIdx: 0 });
-                        }
+                        
+						const MIN_FOTOS_PER_MAP = 3;
+
+						if (bestandenLijst.length >= MIN_FOTOS_PER_MAP) {
+						    alleBeschikbare.push({
+						        index: parseInt(delen[1]),
+						        r: parseInt(delen[3]),
+						        g: parseInt(delen[4]),
+						        b: parseInt(delen[5]),
+						        bestanden: bestandenLijst,
+						        currentIdx: 0
+						    });
+						} else if (bestandenLijst.length > 0) {
+						    console.log(`Map overgeslagen: Index ${delen[1]} had maar ${bestandenLijst.length} foto(s).`);
+						}
                     }
                 }
             }
@@ -558,7 +1588,7 @@
             ctx.drawImage(schilderImgObj, 0, 0);
 
             const container = document.getElementById('mosaicContainer');
-            container.innerHTML = ''; 
+            container.innerHTML = '';
             container.style.gridTemplateColumns = `repeat(${globaleKolommen}, ${globaleGrootte}px)`;
             container.style.gridAutoRows = `${globaleGrootte}px`;
             container.style.width = `${globaleKolommen * globaleGrootte}px`;
@@ -571,7 +1601,7 @@
                     const tempCtx = tempCanvas.getContext('2d');
                     tempCtx.drawImage(canvas, x * blokGrootteX, y * blokGrootteY, blokGrootteX, blokGrootteY, 0, 0, 1, 1);
                     const pData = tempCtx.getImageData(0, 0, 1, 1).data;
-                    
+
                     let bestVGA = vgaPalet[0], minAfstandTotVGA = Infinity;
                     for (let j = 0; j < vgaPalet.length; j++) {
                         let dist = rgbAfstandRedmean(pData[0], pData[1], pData[2], vgaPalet[j].r, vgaPalet[j].g, vgaPalet[j].b);
@@ -618,8 +1648,8 @@
                 }
             }
             statusLabel.innerText = "100%";
-            btnStart.disabled = false; 
-            document.getElementById('exportSectie').style.display = 'block'; 
+            btnStart.disabled = false;
+            document.getElementById('exportSectie').style.display = 'block';
             switchTab('tab-resultaat');
         }
 
@@ -648,7 +1678,7 @@
 `;
 
                 const verwerkteBestanden = new Set();
-                const THUMB_SIZE = 64; 
+                const THUMB_SIZE = 64;
                 const canvasThumb = document.createElement('canvas'); canvasThumb.width = THUMB_SIZE; canvasThumb.height = THUMB_SIZE;
                 const ctxThumb = canvasThumb.getContext('2d');
 
@@ -662,11 +1692,11 @@
                         if (!verwerkteBestanden.has(exportNaam)) {
                             verwerkteBestanden.add(exportNaam);
                             const fileData = await tegel.fileObj.handle.getFile();
-                            
+
                             const origFileHandle = await origDir.getFileHandle(exportNaam, { create: true });
                             const origWritable = await origFileHandle.createWritable();
                             await origWritable.write(fileData); await origWritable.close();
-                            
+
                             const imgBitmap = await createImageBitmap(fileData);
                             ctxThumb.clearRect(0,0,THUMB_SIZE,THUMB_SIZE); ctxThumb.drawImage(imgBitmap, 0, 0, THUMB_SIZE, THUMB_SIZE);
                             const blobThumb = await new Promise(res => canvasThumb.toBlob(res, 'image/jpeg', 0.8));
@@ -689,71 +1719,68 @@
             } catch (error) {}
         }
 
-        // --- NIEUW: JPG EXPORT LOGICA ---
         async function exporteerAlsJPG() {
             const statusLabel = document.getElementById('schilderStatus');
             statusLabel.innerText = getTxt('dyn_jpg_bezig');
-            
+
             try {
-                // Hoge resolutie voor export (bijv. 64x64 per vakje)
-                const TILE_RES = 64; 
-                
-                // Creëer een reusachtig, onzichtbaar canvas
+                const TILE_RES = 64;
+
                 const canvas = document.createElement('canvas');
                 canvas.width = globaleKolommen * TILE_RES;
                 canvas.height = globaleAantalRijen * TILE_RES;
                 const ctx = canvas.getContext('2d');
-                
-                // Achtergrond op zwart zetten voor de zekerheid
+
                 ctx.fillStyle = '#0b0b0c';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 for (let i = 0; i < globaleGridState.length; i++) {
                     const tegel = globaleGridState[i];
-                    
+
                     if (tegel.type === 'diagnose') {
-                        // Ontbrekend vakje tekenen
                         ctx.fillStyle = `rgb(${tegel.vga.r}, ${tegel.vga.g}, ${tegel.vga.b})`;
                         ctx.fillRect(tegel.x * TILE_RES, tegel.y * TILE_RES, TILE_RES, TILE_RES);
-                        
-                        // Een vraagteken in het midden
+
                         ctx.fillStyle = '#ffffff';
                         ctx.font = 'bold 24px sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillText('?', tegel.x * TILE_RES + TILE_RES/2, tegel.y * TILE_RES + TILE_RES/2);
                     } else {
-                        // Daadwerkelijke foto intekenen
                         const fileData = await tegel.fileObj.handle.getFile();
                         const imgBitmap = await createImageBitmap(fileData);
-                        
-                        // Zorg dat de uitsnede vierkant wordt vanuit het midden, net als in de echte weergave
+
                         const size = Math.min(imgBitmap.width, imgBitmap.height);
                         const startX = (imgBitmap.width - size) / 2;
                         const startY = (imgBitmap.height - size) / 2;
-                        
+
                         ctx.drawImage(imgBitmap, startX, startY, size, size, tegel.x * TILE_RES, tegel.y * TILE_RES, TILE_RES, TILE_RES);
                     }
                 }
 
-                // Genereer de download link
+                const overlayWaarde = parseInt(document.getElementById('sliderOverlay').value) / 100;
+                if (schilderImgObj && overlayWaarde > 0) {
+                    ctx.globalAlpha = overlayWaarde;
+                    ctx.drawImage(schilderImgObj, 0, 0, canvas.width, canvas.height);
+                    ctx.globalAlpha = 1.0;
+                }
+
                 canvas.toBlob(function(blob) {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    
+
                     const projNaam = document.getElementById('projectNaamInput').value || "VGA_Mozaiek";
-                    // Verwijder spaties en vreemde tekens uit de bestandsnaam
                     const veiligeNaam = projNaam.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                    
+
                     a.download = veiligeNaam + "_high_res.jpg";
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                    
+
                     statusLabel.innerText = "✅ JPG succesvol gedownload!";
-                }, 'image/jpeg', 0.95); // 0.95 = Zeer hoge JPG kwaliteit
+                }, 'image/jpeg', 0.95);
 
             } catch (error) {
                 statusLabel.innerText = "Fout bij JPG export: " + error.message;
@@ -761,12 +1788,12 @@
         }
 
         function openStudioModal(bron, tekst) {
-            document.getElementById('groteFoto').src = bron; 
-            document.getElementById('modal-tekst').innerText = tekst; 
+            document.getElementById('groteFoto').src = bron;
+            document.getElementById('modal-tekst').innerText = tekst;
             document.getElementById('modal').style.display = 'flex';
         }
-        function sluitStudioModal(e) { 
-            if (e.target.id === 'modal' || e.target.id === 'modal-tekst') document.getElementById('modal').style.display = 'none'; 
+        function sluitStudioModal(e) {
+            if (e.target.id === 'modal' || e.target.id === 'modal-tekst') document.getElementById('modal').style.display = 'none';
         }
     </script>
 </body>
