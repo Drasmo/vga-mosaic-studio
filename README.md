@@ -45,3 +45,14 @@ By using the browser's built-in file system access (`showDirectoryPicker`), this
 * Download the latest version of the HTML file.
 * Open the file in Chrome, Edge, or Firefox.
 * Follow the simple steps in the navigation bar to start creating.
+
+## Changelog
+
+### [v2.0] - 2026-06-01
+#### Added
+*   **Smart Balancing:** Advanced global color distribution algorithm for more harmonious and natural mosaic results.
+*   **Detail-Hunter:** Edge-detection mapping to preserve sharp lines, high-contrast areas, and crucial image details.
+
+#### Improved
+*   Optimized core image processing algorithms for faster client-side rendering.
+*   Refined color-matching logic to prevent single-color dominance.
